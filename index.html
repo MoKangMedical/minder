@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#FF6B35">
+    <title>念念 - 你的第二记忆</title>
+    <meta name="description" content="AI帮你珍藏每一个念想，让每个念想都不被辜负">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" href="assets/icon-192.png">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-content">
+            <div class="heart-icon">🍐</div>
+            <h1>念念</h1>
+            <p>你的第二记忆</p>
+        </div>
+    </div>
+
+    <!-- Main App -->
+    <div id="app" class="app hidden">
+        <!-- Header -->
+        <header class="header">
+            <div class="greeting">
+                <h1 id="greetingText">早安 ☀️</h1>
+                <p id="subtitleText">雪梨会一直陪着你的</p>
+            </div>
+            <button class="btn-stats" onclick="showStats()">📊</button>
+        </header>
+
+        <!-- Stats Cards -->
+        <section class="stats-section">
+            <div class="stat-card">
+                <span class="stat-number" id="activeCount">0</span>
+                <span class="stat-label">待办念想</span>
+            </div>
+            <div class="stat-card">
+                <span class="stat-number" id="completedCount">0</span>
+                <span class="stat-label">已完成</span>
+            </div>
+        </section>
+
+        <!-- Filter -->
+        <div class="filter-section">
+            <button class="filter-btn active" data-filter="all">全部</button>
+            <button class="filter-btn" data-filter="active">待办</button>
+            <button class="filter-btn" data-filter="completed">已完成</button>
+        </div>
+
+        <!-- Reminders List -->
+        <main class="reminders-container" id="remindersList">
+            <!-- Dynamic content -->
+        </main>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state hidden">
+            <div class="empty-icon">📝</div>
+            <p>还没有念想</p>
+            <p class="empty-hint">点击下方按钮，说出你的第一个念想</p>
+        </div>
+
+        <!-- Record Button -->
+        <button class="fab-record" id="recordBtn" onclick="startRecording()">
+            <span class="mic-icon">🎤</span>
+        </button>
+    </div>
+
+    <!-- Recording Modal -->
+    <div id="recordModal" class="modal hidden">
+        <div class="modal-content record-modal">
+            <button class="btn-close" onclick="closeRecordModal()">✕</button>
+            <p class="record-hint" id="recordHint">说出你的念想，我在听 👂</p>
+            
+            <!-- Waveform -->
+            <div class="waveform" id="waveform">
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+                <div class="bar"></div>
+            </div>
+
+            <!-- Result Card -->
+            <div id="resultCard" class="result-card hidden">
+                <h3>解析结果</h3>
+                <div class="result-content">
+                    <p class="result-title" id="resultTitle">--</p>
+                    <p class="result-time" id="resultTime">--</p>
+                    <span class="result-category" id="resultCategory">--</span>
+                </div>
+                <div class="result-actions">
+                    <button class="btn-secondary" onclick="cancelRecording()">取消</button>
+                    <button class="btn-primary" onclick="saveReminder()">保存念想</button>
+                </div>
+            </div>
+
+            <!-- Record Button Large -->
+            <button class="btn-record-large" id="recordBtnLarge" 
+                    onmousedown="startRecordingVoice()" 
+                    onmouseup="stopRecordingVoice()"
+                    ontouchstart="startRecordingVoice()"
+                    ontouchend="stopRecordingVoice()">
+                <span>按住说话</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Card Modal -->
+    <div id="cardModal" class="modal hidden">
+        <div class="modal-content card-modal">
+            <button class="btn-close" onclick="closeCardModal()">✕</button>
+            <div class="completion-card">
+                <div class="card-icon">✨</div>
+                <h2>又完成了一个念想</h2>
+                <p class="card-title" id="cardTitle">--</p>
+                <p class="card-date" id="cardDate">--</p>
+                <p class="card-encouragement" id="cardEncouragement">真棒！继续加油 ♥</p>
+                <div class="card-actions">
+                    <button class="btn-share" onclick="shareCard()">分享到朋友圈</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stats Modal -->
+    <div id="statsModal" class="modal hidden">
+        <div class="modal-content stats-modal">
+            <button class="btn-close" onclick="closeStatsModal()">✕</button>
+            <h2>念想统计</h2>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-value" id="totalCount">0</span>
+                    <span class="stat-name">总念想</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="completionRate">0%</span>
+                    <span class="stat-name">完成率</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="todayCount">0</span>
+                    <span class="stat-name">今日完成</span>
+                </div>
+            </div>
+            <div class="category-stats" id="categoryStats">
+                <!-- Dynamic content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast hidden"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
