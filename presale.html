@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>念念创始会员预售 - 限时特惠</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #FF6B35 0%, #FFB6C1 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .logo {
+            font-size: 64px;
+            margin-bottom: 8px;
+        }
+        
+        .header h1 {
+            color: #FF6B35;
+            font-size: 28px;
+            margin-bottom: 4px;
+        }
+        
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .price-box {
+            background: linear-gradient(135deg, #FFF5F0 0%, #FFE8E0 100%);
+            border-radius: 20px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 24px;
+            border: 2px solid #FF6B35;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #FF6B35;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+        
+        .sale-price {
+            font-size: 56px;
+            color: #FF6B35;
+            font-weight: bold;
+            line-height: 1;
+        }
+        
+        .sale-price span {
+            font-size: 20px;
+        }
+        
+        .period {
+            color: #666;
+            font-size: 14px;
+            margin-top: 8px;
+        }
+        
+        .urgency {
+            background: #FFF3F3;
+            border: 1px solid #FFB6C1;
+            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .urgency-text {
+            color: #FF6B35;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        
+        .features {
+            margin-bottom: 24px;
+        }
+        
+        .feature-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .feature-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .feature-item:last-child {
+            border-bottom: none;
+        }
+        
+        .feature-icon {
+            color: #4CAF50;
+            font-weight: bold;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+        
+        .qrcode-section {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .qrcode-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 16px;
+        }
+        
+        .qrcode-box {
+            background: #f9f9f9;
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 12px;
+        }
+        
+        .qrcode-placeholder {
+            width: 200px;
+            height: 200px;
+            background: #e0e0e0;
+            border-radius: 12px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            font-size: 14px;
+            border: 2px dashed #ccc;
+        }
+        
+        .qrcode-note {
+            color: #666;
+            font-size: 13px;
+            margin-top: 8px;
+        }
+        
+        .steps {
+            background: #f9f9f9;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .steps h3 {
+            font-size: 15px;
+            color: #333;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+        
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 12px;
+            font-size: 13px;
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .step-number {
+            width: 20px;
+            height: 20px;
+            background: #FF6B35;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 10px;
+            flex-shrink: 0;
+        }
+        
+        .contact-section {
+            text-align: center;
+            padding: 16px;
+            background: #FFF5F0;
+            border-radius: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .contact-title {
+            font-size: 13px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+        
+        .contact-wechat {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FF6B35;
+            font-family: monospace;
+        }
+        
+        .footer {
+            text-align: center;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .safe-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: #4CAF50;
+            font-size: 12px;
+            margin-top: 8px;
+        }
+        
+        /* 已购买人数动画 */
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .sold-count {
+            text-align: center;
+            color: #FF6B35;
+            font-weight: bold;
+            font-size: 14px;
+            margin-bottom: 16px;
+            animation: pulse 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="logo">🍐</div>
+            <h1>念念创始会员</h1>
+            <p>你的第二记忆，珍藏每一个念想</p>
+        </div>
+        
+        <div class="price-box">
+            <div class="badge">🔥 限时4.3折</div>
+            <div class="original-price">原价 ¥118/年</div>
+            <div class="sale-price"><span>¥</span>29<span>/年</span></div>
+            <div class="period">限量100名 · 仅剩77个名额</div>
+        </div>
+        
+        <div class="urgency">
+            <div class="urgency-text">⏰ 预售倒计时 7 天</div>
+        </div>
+        
+        <div class="sold-count">
+            🔥 已有 23 人购买
+        </div>
+        
+        <div class="features">
+            <div class="feature-title">创始会员专享权益</div>
+            <div class="feature-item">
+                <span class="feature-icon">✓</span>
+                <span>无限念想记录（价值¥68/年）</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">✓</span>
+                <span>高级AI解析引擎</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">✓</span>
+                <span>云端同步备份</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">✓</span>
+                <span>专属"创始会员"徽章</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">✓</span>
+                <span>优先体验新功能</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">✓</span>
+                <span>1对1专属客服</span>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon">✓</span>
+                <span>终身享受¥29续费价</span>
+            </div>
+        </div>
+        
+        <div class="qrcode-section">
+            <div class="qrcode-title">微信扫码支付 ¥29</div>
+            <div class="qrcode-box">
+                <!-- TODO: 替换为你的微信收款码图片 -->
+                <div class="qrcode-placeholder">
+                    请替换为<br>微信收款码
+                </div>
+            </div>
+            <p class="qrcode-note">支付后添加客服微信开通会员</p>
+        </div>
+        
+        <div class="contact-section">
+            <div class="contact-title">客服微信（支付后添加）</div>
+            <div class="contact-wechat">minder2024</div>
+        </div>
+        
+        <div class="steps">
+            <h3>📝 购买流程</h3>
+            <div class="step">
+                <div class="step-number">1</div>
+                <div>微信扫码支付 ¥29</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>添加客服微信: minder2024</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>发送支付截图和注册手机号</div>
+            </div>
+            <div class="step">
+                <div class="step-number">4</div>
+                <div>立即开通创始会员</div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>🎁 新用户首月仅需 ¥1 体验</p>
+            <div class="safe-tag">
+                <span>🔒</span>
+                <span>安全支付 · 7天无理由退款</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 动态更新已售数量（模拟）
+        let soldCount = 23;
+        const maxCount = 100;
+        
+        function updateSoldCount() {
+            if (soldCount < 35) {
+                soldCount++;
+                document.querySelector('.sold-count').textContent = `🔥 已有 ${soldCount} 人购买`;
+                document.querySelector('.period').textContent = `限量100名 · 仅剩${maxCount - soldCount}个名额`;
+            }
+        }
+        
+        // 每10-30秒随机增加
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                updateSoldCount();
+            }
+        }, 15000);
+    </script>
+</body>
+</html>
