@@ -2,418 +2,251 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#667eea">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>念念 - 你的第二记忆</title>
-    <meta name="description" content="AI帮你整理记忆，自动识别票务、取件码，生成待办和日程">
-    <link rel="manifest" href="manifest.json">
-    <link rel="icon" href="assets/icon-192.png">
-    <link rel="apple-touch-icon" href="assets/icon-192.png">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/butterfly.css">
+    <link rel="stylesheet" href="css/entrance.css">
 </head>
 <body>
-    <!-- Loading Screen - 心灵梦境 -->
-    <div id="loadingScreen" class="loading-screen">
-        <!-- 星光粒子 -->
-        <div class="stars-container">
-            <div class="star"></div>
-            <div class="star"></div>
-            <div class="star"></div>
-            <div class="star"></div>
-            <div class="star"></div>
-            <div class="star"></div>
-            <div class="star"></div>
-            <div class="star"></div>
-            <div class="star"></div>
-            <div class="star"></div>
+    <!-- 梦幻入口页面 -->
+    <div id="entrance" class="entrance">
+        <!-- 星空背景 -->
+        <div class="starry-sky">
+            <div class="stars"></div>
+            <div class="shooting-star"></div>
+            <div class="shooting-star"></div>
+            <div class="shooting-star"></div>
         </div>
         
-        <!-- 漂浮光球 -->
-        <div class="orb orb-1"></div>
-        <div class="orb orb-2"></div>
-        <div class="orb orb-3"></div>
+        <!-- 极光 -->
+        <div class="aurora">
+            <div class="aurora-band"></div>
+            <div class="aurora-band"></div>
+            <div class="aurora-band"></div>
+        </div>
         
-        <!-- 核心内容 -->
-        <div class="loading-content">
-            <!-- Logo - 动态蝴蝶 -->
-            <div class="butterfly-container">
-                <!-- 小蝴蝶装饰 -->
-                <div class="mini-butterfly">🦋</div>
-                <div class="mini-butterfly">🦋</div>
-                <div class="mini-butterfly">🦋</div>
-                
-                <!-- 主蝴蝶 -->
-                <div class="css-butterfly">
-                    <!-- 左翅膀 -->
-                    <div class="butterfly-wing left">
-                        <div class="wing-upper">
-                            <div class="wing-pattern"></div>
-                            <div class="wing-pattern"></div>
-                        </div>
-                        <div class="wing-lower"></div>
+        <!-- 月亮 -->
+        <div class="moon">
+            <div class="moon-glow"></div>
+            <div class="moon-surface"></div>
+        </div>
+        
+        <!-- 远山 -->
+        <div class="mountains">
+            <div class="mountain mountain-1"></div>
+            <div class="mountain mountain-2"></div>
+            <div class="mountain mountain-3"></div>
+        </div>
+        
+        <!-- 森林背景 -->
+        <div class="forest-bg">
+            <div class="tree tree-1"></div>
+            <div class="tree tree-2"></div>
+            <div class="tree tree-3"></div>
+            <div class="tree tree-4"></div>
+            <div class="tree tree-5"></div>
+        </div>
+        
+        <!-- 发光植物 -->
+        <div class="glowing-plants">
+            <div class="plant plant-1"></div>
+            <div class="plant plant-2"></div>
+            <div class="plant plant-3"></div>
+            <div class="plant plant-4"></div>
+        </div>
+        
+        <!-- 树洞入口 -->
+        <div class="treehole-container">
+            <div class="treehole-wrapper" onclick="enterDream()">
+                <!-- 大树 -->
+                <div class="big-tree">
+                    <div class="tree-trunk">
+                        <!-- 树纹理 -->
+                        <div class="bark-texture"></div>
                     </div>
-                    
-                    <!-- 身体 -->
-                    <div class="butterfly-body">
-                        <div class="butterfly-head">
-                            <div class="butterfly-antenna left"></div>
-                            <div class="butterfly-antenna right"></div>
-                        </div>
-                    </div>
-                    
-                    <!-- 右翅膀 -->
-                    <div class="butterfly-wing right">
-                        <div class="wing-upper">
-                            <div class="wing-pattern"></div>
-                            <div class="wing-pattern"></div>
-                        </div>
-                        <div class="wing-lower"></div>
-                    </div>
+                    <div class="tree-crown"></div>
                 </div>
                 
-                <!-- 草丛 -->
-                <div class="grass-container">
-                    <div class="grass-blade"></div>
-                    <div class="grass-blade"></div>
-                    <div class="grass-blade"></div>
-                    <div class="grass-blade"></div>
-                    <div class="grass-blade"></div>
-                    <div class="grass-blade"></div>
-                    <div class="grass-blade"></div>
-                    <div class="flower">🌸</div>
-                    <div class="flower">🌼</div>
-                    <div class="flower">🌺</div>
+                <!-- 树洞 -->
+                <div class="treehole">
+                    <div class="hole-inner">
+                        <!-- 漩涡 -->
+                        <div class="vortex">
+                            <div class="vortex-ring"></div>
+                            <div class="vortex-ring"></div>
+                            <div class="vortex-ring"></div>
+                            <div class="vortex-ring"></div>
+                        </div>
+                        
+                        <!-- 星光 -->
+                        <div class="hole-stars">
+                            <div class="hole-star"></div>
+                            <div class="hole-star"></div>
+                            <div class="hole-star"></div>
+                            <div class="hole-star"></div>
+                            <div class="hole-star"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 树洞边框发光 -->
+                    <div class="hole-glow"></div>
+                </div>
+                
+                <!-- 萤火虫 -->
+                <div class="fireflies">
+                    <div class="firefly"></div>
+                    <div class="firefly"></div>
+                    <div class="firefly"></div>
+                    <div class="firefly"></div>
+                    <div class="firefly"></div>
+                    <div class="firefly"></div>
                 </div>
             </div>
             
-            <!-- 品牌 -->
-            <div class="brand-container">
-                <div class="brand-cn">念念</div>
-                <div class="brand-en">Minder</div>
-            </div>
-            
-            <!-- Slogan - 心灵寄语 -->
-            <div class="slogan-container">
-                <div class="slogan-text">
-                    <span class="slogan-line">一念既起，皆为序章</span>
-                    <span class="slogan-line">让每一次心动，都有归处</span>
-                </div>
+            <!-- 点击提示 -->
+            <div class="enter-hint">
+                <div class="hint-text">轻触树洞，进入梦境</div>
+                <div class="hint-arrow"></div>
             </div>
         </div>
         
-        <!-- 加载进度 -->
-        <div class="loading-progress">
-            <div class="progress-heart">
-                <span class="heart-beat">💜</span>
-                <span class="progress-text">心灵唤醒中</span>
-                <span class="heart-beat">💜</span>
-            </div>
-            <div class="progress-bar">
-                <div class="progress-fill"></div>
-            </div>
-            <div class="loading-progress-text">正在进入多彩世界...</div>
+        <!-- 前景草丛 -->
+        <div class="foreground-grass">
+            <div class="grass-tuft tuft-1"></div>
+            <div class="grass-tuft tuft-2"></div>
+            <div class="grass-tuft tuft-3"></div>
+            <div class="grass-tuft tuft-4"></div>
+            <div class="grass-tuft tuft-5"></div>
+        </div>
+        
+        <!-- 迷雾 -->
+        <div class="mist">
+            <div class="mist-layer"></div>
+            <div class="mist-layer"></div>
+        </div>
+        
+        <!-- 品牌 -->
+        <div class="brand">
+            <div class="brand-butterfly">🦋</div>
+            <div class="brand-name">念念</div>
+            <div class="brand-slogan">一念既起，皆为序章</div>
+        </div>
+        
+        <!-- 粒子效果 -->
+        <div class="floating-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
         </div>
     </div>
-
-    <!-- Main App -->
-    <div id="app" class="app hidden">
-        <!-- Header - 梦境导航 -->
-        <header class="header">
-            <div class="header-content">
-                <div class="header-brand">
-                    <div class="header-icon" style="animation: butterflyGlow 2s ease-in-out infinite;">🦋</div>
-                    <div class="header-title">念念</div>
-                </div>
-                <div class="header-actions">
-                    <button class="header-btn" onclick="toggleSearch()" title="搜索">🔍</button>
-                    <button class="header-btn" onclick="showStats()" title="统计">📊</button>
-                </div>
-            </div>
-        </header>
-
-        <!-- Search Bar (Hidden by default) -->
-        <div id="searchContainer" class="search-container hidden">
-            <div class="search-bar">
-                <span class="search-icon">🔍</span>
-                <input type="text" id="searchInput" class="search-input" placeholder="搜索念想..." oninput="searchReminders(this.value)">
-            </div>
-        </div>
-
-        <!-- View Tabs -->
-        <div class="view-tabs">
-            <button class="view-tab active" data-view="timeline" onclick="switchView('timeline')">时间线</button>
-            <button class="view-tab" data-view="calendar" onclick="switchView('calendar')">日历</button>
-            <button class="view-tab" data-view="tickets" onclick="switchView('tickets')">票务</button>
-        </div>
-
-        <!-- Timeline View -->
-        <div id="timelineView" class="view-container">
-            <div class="input-methods">
-                <button class="input-method-btn" onclick="showTextModal()">
-                    <div class="input-method-icon text">📝</div>
-                    <span class="input-method-label">文本</span>
-                </button>
-                <button class="input-method-btn" onclick="showVoiceModal()">
-                    <div class="input-method-icon voice">🎤</div>
-                    <span class="input-method-label">语音</span>
-                </button>
-                <button class="input-method-btn" onclick="showImageModal()">
-                    <div class="input-method-icon photo">📷</div>
-                    <span class="input-method-label">图片</span>
-                </button>
-            </div>
-
-            <div id="timelineContainer" class="timeline-container">
-                <!-- Dynamic content -->
-            </div>
-
-            <div id="emptyState" class="empty-state hidden">
-                <div class="empty-icon">🌙</div>
-                <div class="empty-title">心静如水</div>
-                <div class="empty-subtitle">捕捉此刻的想法，让美好有迹可循</div>
-            </div>
-        </div>
-
-        <!-- Calendar View -->
-        <div id="calendarView" class="view-container hidden">
-            <div class="calendar-container">
-                <div class="calendar-header">
-                    <div id="calendarMonth" class="calendar-month">2026年2月</div>
-                    <div class="calendar-nav">
-                        <button class="calendar-nav-btn" onclick="prevMonth()">‹</button>
-                        <button class="calendar-nav-btn" onclick="nextMonth()">›</button>
-                    </div>
-                </div>
-                <div class="calendar-grid" id="calendarGrid">
-                    <!-- Dynamic calendar -->
-                </div>
-            </div>
-        </div>
-
-        <!-- Tickets View -->
-        <div id="ticketsView" class="view-container hidden">
-            <div class="timeline-container" id="ticketsContainer">
-                <!-- Dynamic tickets -->
-            </div>
-            <div id="emptyTickets" class="empty-state">
-                <div class="empty-icon">🎫</div>
-                <div class="empty-title">梦想门票</div>
-                <div class="empty-subtitle">每一段旅程，都是心灵的诗行</div>
-            </div>
-        </div>
-
-        <!-- FAB -->
-        <div class="fab-container">
-            <div id="fabMenu" class="fab-menu">
-                <div class="fab-item" onclick="showSoulMoment()">
-                    <span class="fab-item-label">心灵时刻</span>
-                    <button class="fab-item-btn">💭</button>
-                </div>
-                <div class="fab-item" onclick="showTextModal()">
-                    <span class="fab-item-label">文本</span>
-                    <button class="fab-item-btn">📝</button>
-                </div>
-                <div class="fab-item" onclick="showVoiceModal()">
-                    <span class="fab-item-label">语音</span>
-                    <button class="fab-item-btn">🎤</button>
-                </div>
-                <div class="fab-item" onclick="showImageModal()">
-                    <span class="fab-item-label">图片</span>
-                    <button class="fab-item-btn">📷</button>
-                </div>
-            </div>
-            <button id="fab" class="fab" onclick="toggleFab()">+</button>
-        </div>
+    
+    <!-- 过渡动画 -->
+    <div id="transition" class="transition hidden">
+        <div class="transition-vortex"></div>
+        <div class="transition-text">正在进入梦境...</div>
     </div>
-
-    <!-- Soul Moment Modal - 心灵时刻 -->
-    <div id="soulModal" class="modal" onclick="closeModal(event, 'soulModal')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <span class="modal-title">💭 心灵时刻</span>
-                <button class="modal-close" onclick="hideModal('soulModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <div style="text-align: center; margin-bottom: 20px;">
-                    <div style="font-size: 48px; margin-bottom: 12px;">🌸</div>
-                    <div style="font-size: 14px; color: #9B8AA5; line-height: 1.8;">
-                        此刻，你的心情如何？<br>
-                        记录下这份感动，让它成为永恒
-                    </div>
-                </div>
-                <div class="mood-selector" style="display: flex; justify-content: center; gap: 16px; margin-bottom: 20px;">
-                    <button class="mood-btn" onclick="selectMood('peaceful')" data-mood="peaceful" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid transparent; background: rgba(224,195,252,0.3); font-size: 24px; cursor: pointer; transition: all 0.3s;">😌</button>
-                    <button class="mood-btn" onclick="selectMood('happy')" data-mood="happy" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid transparent; background: rgba(255,209,143,0.3); font-size: 24px; cursor: pointer; transition: all 0.3s;">😊</button>
-                    <button class="mood-btn" onclick="selectMood('excited')" data-mood="excited" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid transparent; background: rgba(168,237,234,0.3); font-size: 24px; cursor: pointer; transition: all 0.3s;">✨</button>
-                    <button class="mood-btn" onclick="selectMood('grateful')" data-mood="grateful" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid transparent; background: rgba(254,214,227,0.3); font-size: 24px; cursor: pointer; transition: all 0.3s;">🙏</button>
-                    <button class="mood-btn" onclick="selectMood('thoughtful')" data-mood="thoughtful" style="width: 50px; height: 50px; border-radius: 50%; border: 2px solid transparent; background: rgba(210,153,194,0.3); font-size: 24px; cursor: pointer; transition: all 0.3s;">🤔</button>
-                </div>
-                <textarea id="soulInput" class="text-input-area" placeholder="此刻的想法、感悟、心情...
-
-让文字记录这份独特的心境" style="min-height: 150px; background: rgba(255,255,255,0.8);"></textarea>
-                <div style="margin-top: 20px;">
-                    <button class="btn btn-primary" onclick="saveSoulMoment()">珍藏此刻</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Text Input Modal -->
-    <div id="textModal" class="modal" onclick="closeModal(event, 'textModal')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <span class="modal-title">输入文本</span>
-                <button class="modal-close" onclick="hideModal('textModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <textarea id="textInput" class="text-input-area" placeholder="粘贴或输入任何内容：待办事项、会议时间、票务信息、取件码...&#10;&#10;AI会自动识别时间和关键信息"></textarea>
-                <button class="paste-btn" onclick="pasteFromClipboard()">
-                    <span>📋</span>
-                    从剪贴板粘贴
-                </button>
-                <div style="margin-top: 20px;">
-                    <button class="btn btn-primary" onclick="parseText()">智能解析</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Voice Modal -->
-    <div id="voiceModal" class="modal" onclick="closeModal(event, 'voiceModal')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <span class="modal-title">语音输入</span>
-                <button class="modal-close" onclick="hideModal('voiceModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <div class="voice-recorder">
-                    <div class="voice-waveform" id="voiceWaveform">
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                        <div class="bar"></div>
-                    </div>
-                    <button id="voiceBtn" class="voice-btn" onclick="toggleRecording()">🎤</button>
-                    <p class="voice-hint" id="voiceHint">轻触，让心声流淌</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Image Modal -->
-    <div id="imageModal" class="modal" onclick="closeModal(event, 'imageModal')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <span class="modal-title">识别图片</span>
-                <button class="modal-close" onclick="hideModal('imageModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <img id="imagePreview" class="image-preview hidden">
-                <div id="imageUploadArea" class="image-upload-area" onclick="selectImage()">
-                    <div class="image-upload-icon">📷</div>
-                    <div class="image-upload-text">轻触上传，捕捉记忆的瞬间<br>票务、取件码，皆是生活印记</div>
-                </div>
-                <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="handleImageSelect(event)">
-                <div style="margin-top: 20px;">
-                    <button id="parseImageBtn" class="btn btn-primary hidden" onclick="parseImage()">识别图片</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Result Modal -->
-    <div id="resultModal" class="modal" onclick="closeModal(event, 'resultModal')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <span class="modal-title">解析结果</span>
-                <button class="modal-close" onclick="hideModal('resultModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <div class="result-container">
-                    <div class="result-header">
-                        <div class="result-icon" id="resultIcon">🤖</div>
-                        <span class="result-title">AI识别结果</span>
-                    </div>
-                    <div class="result-content" id="resultContent">
-                        <!-- Dynamic result -->
-                    </div>
-                </div>
-                <div class="result-actions">
-                    <button class="btn btn-secondary" onclick="hideModal('resultModal')">取消</button>
-                    <button class="btn btn-primary" onclick="saveResult()">保存</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Ticket Detail Modal -->
-    <div id="ticketModal" class="modal" onclick="closeModal(event, 'ticketModal')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <span class="modal-title">票务详情</span>
-                <button class="modal-close" onclick="hideModal('ticketModal')">✕</button>
-            </div>
-            <div class="modal-body" id="ticketDetailContent">
-                <!-- Dynamic ticket detail -->
-            </div>
-        </div>
-    </div>
-
-    <!-- Stats Modal -->
-    <div id="statsModal" class="modal" onclick="closeModal(event, 'statsModal')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <span class="modal-title">统计</span>
-                <button class="modal-close" onclick="hideModal('statsModal')">✕</button>
-            </div>
-            <div class="modal-body">
-                <div class="stats-container">
-                    <div class="stats-card">
-                        <div class="stats-header">
-                            <span class="stats-title">今日概览</span>
-                        </div>
-                        <div class="stats-grid">
-                            <div class="stats-item">
-                                <div class="stats-value" id="todayCount">0</div>
-                                <div class="stats-label">今日事项</div>
-                            </div>
-                            <div class="stats-item">
-                                <div class="stats-value" id="completedToday">0</div>
-                                <div class="stats-label">已完成</div>
-                            </div>
-                            <div class="stats-item">
-                                <div class="stats-value" id="pendingCount">0</div>
-                                <div class="stats-label">待处理</div>
-                            </div>
-                            <div class="stats-item">
-                                <div class="stats-value" id="ticketCount">0</div>
-                                <div class="stats-label">票务</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="stats-card">
-                        <div class="stats-header">
-                            <span class="stats-title">类型分布</span>
-                        </div>
-                        <div id="typeStats">
-                            <!-- Dynamic type stats -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast -->
-    <div id="toast" class="toast"></div>
-
-    <script src="js/app.js"></script>
+    
+    <script>
+        // 进入梦境
+        function enterDream() {
+            const entrance = document.getElementById('entrance');
+            const transition = document.getElementById('transition');
+            const treehole = document.querySelector('.treehole-wrapper');
+            
+            // 点击音效（可选）
+            // playClickSound();
+            
+            // 树洞放大动画
+            treehole.style.transform = 'scale(1.5)';
+            treehole.style.transition = 'transform 1s ease-in';
+            
+            // 显示过渡动画
+            setTimeout(() => {
+                transition.classList.remove('hidden');
+                
+                // 漩涡旋转加速
+                const vortex = document.querySelector('.transition-vortex');
+                vortex.style.animation = 'vortexSpin 0.5s linear infinite';
+                
+                // 3秒后跳转到主应用
+                setTimeout(() => {
+                    window.location.href = 'app.html';
+                }, 2000);
+            }, 800);
+        }
+        
+        // 萤火虫随机飞行
+        function animateFireflies() {
+            const fireflies = document.querySelectorAll('.firefly');
+            
+            fireflies.forEach((fly, index) => {
+                setInterval(() => {
+                    const x = (Math.random() - 0.5) * 100;
+                    const y = (Math.random() - 0.5) * 50;
+                    const duration = 3 + Math.random() * 2;
+                    
+                    fly.style.transition = `transform ${duration}s ease-in-out`;
+                    fly.style.transform = `translate(${x}px, ${y}px)`;
+                }, 3000 + index * 500);
+            });
+        }
+        
+        // 启动萤火虫动画
+        setTimeout(animateFireflies, 1000);
+        
+        // 鼠标/触摸视差效果
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX / window.innerWidth - 0.5;
+            const y = e.clientY / window.innerHeight - 0.5;
+            
+            // 树洞轻微移动
+            const treehole = document.querySelector('.treehole-container');
+            treehole.style.transform = `translate(${x * 10}px, ${y * 10}px)`;
+            
+            // 远山移动
+            const mountains = document.querySelector('.mountains');
+            mountains.style.transform = `translateX(${x * 20}px)`;
+            
+            // 森林移动
+            const forest = document.querySelector('.forest-bg');
+            forest.style.transform = `translateX(${x * 10}px)`;
+        });
+        
+        // 点击树洞时的涟漪效果
+        document.querySelector('.treehole-wrapper').addEventListener('click', function(e) {
+            const ripple = document.createElement('div');
+            ripple.className = 'treehole-ripple';
+            ripple.style.cssText = `
+                position: absolute;
+                width: 100px;
+                height: 100px;
+                background: radial-gradient(circle, rgba(224,195,252,0.6) 0%, transparent 70%);
+                border-radius: 50%;
+                left: 50%;
+                top: 50%;
+                transform: translate(-50%, -50%) scale(0);
+                animation: rippleExpand 0.8s ease-out forwards;
+                pointer-events: none;
+            `;
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 800);
+        });
+        
+        // 添加涟漪动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes rippleExpand {
+                to {
+                    transform: translate(-50%, -50%) scale(3);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
 </body>
 </html>
