@@ -1,0 +1,36 @@
+{
+  "name": "xiaohongshu-auto",
+  "version": "1.0.0",
+  "description": "小红书自动化运营系统 - 念念内容自动发布",
+  "main": "src/scheduler.js",
+  "scripts": {
+    "start": "node src/scheduler.js",
+    "dev": "nodemon src/scheduler.js",
+    "login": "node src/publish/xhs-login.js",
+    "publish:manual": "node src/publish/manual-publish.js",
+    "test:ai": "node test/test-ai.js",
+    "test:image": "node test/test-image.js"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0",
+    "node-cron": "^3.0.3",
+    "axios": "^1.6.2",
+    "puppeteer": "^21.6.1",
+    "node-html-to-image": "^4.0.0",
+    "winston": "^3.11.0",
+    "dotenv": "^16.3.1",
+    "fs-extra": "^11.2.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "keywords": [
+    "xiaohongshu",
+    "automation",
+    "ai",
+    "content",
+    "minder"
+  ],
+  "author": "Minder Team",
+  "license": "MIT"
+}

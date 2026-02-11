@@ -194,7 +194,6 @@ function switchView(view) {
     // Show/hide containers
     document.getElementById('timelineView').classList.add('hidden');
     document.getElementById('calendarView').classList.add('hidden');
-    document.getElementById('ticketsView').classList.add('hidden');
     
     document.getElementById(view + 'View').classList.remove('hidden');
     
@@ -203,8 +202,6 @@ function switchView(view) {
         renderTimeline();
     } else if (view === 'calendar') {
         renderCalendar();
-    } else if (view === 'tickets') {
-        renderTickets();
     }
 }
 
@@ -266,22 +263,9 @@ function renderItemCard(item) {
     const icons = {
         todo: '✓',
         event: '📅',
-        ticket: '🎫',
-        pickup: '📦',
         note: '📝'
     };
-    
-    const isTicket = item.type === 'ticket';
-    const isPickup = item.type === 'pickup';
-    
-    if (isTicket) {
-        return renderTicketCard(item);
-    }
-    
-    if (isPickup) {
-        return renderPickupCard(item);
-    }
-    
+
     return `
         <div class="timeline-item ${item.completed ? 'completed' : ''}" data-id="${item.id}">
             <div class="card">
@@ -301,77 +285,6 @@ function renderItemCard(item) {
             </div>
         </div>
     `;
-}
-
-function renderTicketCard(item) {
-    const ticketColors = {
-        flight: 'linear-gradient(135deg, #5856D6 0%, #AF52DE 100%)',
-        train: 'linear-gradient(135deg, #FF9500 0%, #FF6B35 100%)',
-        movie: 'linear-gradient(135deg, #AF52DE 0%, #FF2D55 100%)',
-        concert: 'linear-gradient(135deg, #FF2D55 0%, #FF6B35 100%)'
-    };
-    
-    const ticketNames = {
-        flight: '✈️ 航班',
-        train: '🚄 火车',
-        movie: '🎬 电影',
-        concert: '🎵 演唱会'
-    };
-    
-    return `
-        <div class="timeline-item" data-id="${item.id}" onclick="showTicketDetail(${item.id})">
-            <div class="ticket-card" style="background: ${ticketColors[item.ticketType] || ticketColors.flight}">
-                <div class="ticket-type">${ticketNames[item.ticketType] || '🎫 票务'}</div>
-                <div class="ticket-title">${escapeHtml(item.title)}</div>
-                <div class="ticket-info">${escapeHtml(item.description || '')}</div>
-                <div class="ticket-barcode">
-                    <div class="ticket-code">${item.ticketCode || '----'}</div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function renderPickupCard(item) {
-    return `
-        <div class="timeline-item ${item.completed ? 'completed' : ''}" data-id="${item.id}">
-            <div class="pickup-card">
-                <div class="pickup-header">
-                    <div class="pickup-icon">📦</div>
-                    <span class="pickup-title">${escapeHtml(item.title)}</span>
-                </div>
-                <div class="pickup-code-display">${item.pickupCode || '----'}</div>
-                <div class="pickup-location">${escapeHtml(item.location || '取件地点未指定')}</div>
-                <div style="margin-top: 12px; display: flex; gap: 8px;">
-                    ${!item.completed ? `
-                        <button class="btn btn-primary" style="flex: 1; padding: 10px;" onclick="event.stopPropagation(); completeItem(${item.id})">标记完成</button>
-                    ` : ''}
-                    <button class="btn btn-secondary" style="flex: 1; padding: 10px;" onclick="event.stopPropagation(); deleteItem(${item.id})">删除</button>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-// Tickets View
-function renderTickets() {
-    const container = document.getElementById('ticketsContainer');
-    const emptyState = document.getElementById('emptyTickets');
-    
-    const tickets = items.filter(item => item.type === 'ticket' || item.type === 'pickup');
-    
-    if (tickets.length === 0) {
-        container.innerHTML = '';
-        emptyState.classList.remove('hidden');
-        return;
-    }
-    
-    emptyState.classList.add('hidden');
-    
-    container.innerHTML = tickets
-        .sort((a, b) => a.time - b.time)
-        .map(item => renderItemCard(item))
-        .join('');
 }
 
 // Calendar
@@ -673,52 +586,7 @@ async function parseWithAI(text, inputType) {
 }
 
 function fallbackParse(text) {
-    // Detect ticket patterns
-    if (text.match(/航班|机票|flight/i)) {
-        return {
-            type: 'ticket',
-            ticketType: 'flight',
-            title: '航班信息',
-            description: text.substring(0, 50),
-            time: Date.now() + 24 * 60 * 60 * 1000,
-            ticketCode: text.match(/[A-Z]{2}\d{3,4}/)?.[0] || ''
-        };
-    }
-    
-    if (text.match(/火车|高铁|动车|train/i)) {
-        return {
-            type: 'ticket',
-            ticketType: 'train',
-            title: '火车票',
-            description: text.substring(0, 50),
-            time: Date.now() + 24 * 60 * 60 * 1000
-        };
-    }
-    
-    if (text.match(/电影|movie|cinema/i)) {
-        return {
-            type: 'ticket',
-            ticketType: 'movie',
-            title: '电影票',
-            description: text.substring(0, 50),
-            time: Date.now() + 24 * 60 * 60 * 1000
-        };
-    }
-    
-    // Detect pickup code
-    const pickupMatch = text.match(/(取件码|提取码|自提码)[：:]?\s*(\d+[-\s]?\d+[-\s]?\d+|\d{4,})/i) ||
-                       text.match(/(\d{4,}[-\s]?\d{0,4})\s*.*?取件/);
-    if (pickupMatch) {
-        return {
-            type: 'pickup',
-            title: '快递取件',
-            pickupCode: pickupMatch[2] || pickupMatch[1],
-            location: text.match(/(菜鸟驿站|快递柜|便利店|超市)/)?.[0] || '取件点',
-            time: Date.now() + 24 * 60 * 60 * 1000
-        };
-    }
-    
-    // Default todo
+    // Default todo - simple text parsing
     return {
         type: 'todo',
         title: text.substring(0, 20),
@@ -732,11 +600,9 @@ function showResultModal(result) {
     const typeNames = {
         todo: '待办事项',
         event: '日程事件',
-        ticket: '票务',
-        pickup: '取件码',
         note: '笔记'
     };
-    
+
     const content = document.getElementById('resultContent');
     content.innerHTML = `
         <div class="result-item">
@@ -757,18 +623,6 @@ function showResultModal(result) {
             <span class="result-label">时间</span>
             <span class="result-value">${formatTime(result.time)}</span>
         </div>
-        ${result.ticketCode ? `
-        <div class="result-item">
-            <span class="result-label">票号</span>
-            <span class="result-value">${result.ticketCode}</span>
-        </div>
-        ` : ''}
-        ${result.pickupCode ? `
-        <div class="result-item">
-            <span class="result-label">取件码</span>
-            <span class="result-value" style="font-size: 18px; font-weight: 700;">${result.pickupCode}</span>
-        </div>
-        ` : ''}
         ${result.location ? `
         <div class="result-item">
             <span class="result-label">地点</span>
@@ -776,7 +630,7 @@ function showResultModal(result) {
         </div>
         ` : ''}
     `;
-    
+
     document.getElementById('resultModal').classList.add('show');
 }
 
@@ -1012,18 +866,16 @@ function deleteItem(id) {
     const itemElement = document.querySelector(`[data-id="${id}"]`);
     if (itemElement) {
         itemElement.classList.add('deleting');
-        
+
         // Wait for animation then delete
         setTimeout(() => {
             items = items.filter(i => i.id !== id);
             saveItems();
-            
+
             if (currentView === 'timeline') {
                 renderTimeline();
-            } else if (currentView === 'tickets') {
-                renderTickets();
             }
-            
+
             showToast('已删除');
         }, 300);
     } else {
@@ -1031,57 +883,14 @@ function deleteItem(id) {
         if (confirm('确定要删除吗？')) {
             items = items.filter(i => i.id !== id);
             saveItems();
-            
+
             if (currentView === 'timeline') {
                 renderTimeline();
-            } else if (currentView === 'tickets') {
-                renderTickets();
             }
-            
+
             showToast('已删除');
         }
     }
-}
-
-function showTicketDetail(id) {
-    const item = items.find(i => i.id === id);
-    if (!item || item.type !== 'ticket') return;
-    
-    const ticketNames = {
-        flight: '✈️ 航班',
-        train: '🚄 火车',
-        movie: '🎬 电影',
-        concert: '🎵 演唱会'
-    };
-    
-    document.getElementById('ticketDetailContent').innerHTML = `
-        <div class="ticket-card" style="margin-bottom: 20px; background: linear-gradient(135deg, #5856D6 0%, #AF52DE 100%);">
-            <div class="ticket-type">${ticketNames[item.ticketType] || '🎫 票务'}</div>
-            <div class="ticket-title">${escapeHtml(item.title)}</div>
-            <div class="ticket-info">${escapeHtml(item.description || '')}</div>
-            <div class="ticket-barcode">
-                <div class="ticket-code">${item.ticketCode || '----'}</div>
-            </div>
-        </div>
-        <div class="result-content">
-            <div class="result-item">
-                <span class="result-label">时间</span>
-                <span class="result-value">${formatTime(item.time)}</span>
-            </div>
-            ${item.location ? `
-            <div class="result-item">
-                <span class="result-label">地点</span>
-                <span class="result-value">${escapeHtml(item.location)}</span>
-            </div>
-            ` : ''}
-        </div>
-        <div style="margin-top: 20px; display: flex; gap: 12px;">
-            <button class="btn btn-secondary" onclick="hideModal('ticketModal')">关闭</button>
-            <button class="btn btn-primary" onclick="deleteItem(${item.id}); hideModal('ticketModal');">删除</button>
-        </div>
-    `;
-    
-    document.getElementById('ticketModal').classList.add('show');
 }
 
 // Search
@@ -1127,33 +936,30 @@ function searchReminders(query) {
 function showStats() {
     const today = new Date().toDateString();
     const todayItems = items.filter(i => new Date(i.time).toDateString() === today);
-    
+
     document.getElementById('todayCount').textContent = todayItems.length;
     document.getElementById('completedToday').textContent = todayItems.filter(i => i.completed).length;
     document.getElementById('pendingCount').textContent = items.filter(i => !i.completed).length;
-    document.getElementById('ticketCount').textContent = items.filter(i => i.type === 'ticket').length;
-    
+
     // Type stats
     const types = {};
     items.forEach(i => {
         types[i.type] = (types[i.type] || 0) + 1;
     });
-    
+
     const typeNames = {
         todo: '待办',
         event: '日程',
-        ticket: '票务',
-        pickup: '取件',
         note: '笔记'
     };
-    
+
     document.getElementById('typeStats').innerHTML = Object.entries(types).map(([type, count]) => `
         <div class="settings-item">
             <span class="settings-label">${typeNames[type] || type}</span>
             <span style="color: var(--text-secondary);">${count}</span>
         </div>
     `).join('');
-    
+
     document.getElementById('statsModal').classList.add('show');
 }
 

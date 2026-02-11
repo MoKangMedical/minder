@@ -51,7 +51,6 @@
         <div class="view-tabs">
             <button class="view-tab active" data-view="timeline" onclick="switchView('timeline')">时间线</button>
             <button class="view-tab" data-view="calendar" onclick="switchView('calendar')">日历</button>
-            <button class="view-tab" data-view="tickets" onclick="switchView('tickets')">票务</button>
         </div>
 
         <!-- Timeline View -->
@@ -91,16 +90,6 @@
                     </div>
                 </div>
                 <div class="calendar-grid" id="calendarGrid"></div>
-            </div>
-        </div>
-
-        <!-- Tickets View -->
-        <div id="ticketsView" class="view-container hidden">
-            <div class="timeline-container" id="ticketsContainer"></div>
-            <div id="emptyTickets" class="empty-state">
-                <div class="empty-icon">🎫</div>
-                <div class="empty-title">梦想门票</div>
-                <div class="empty-subtitle">每一段旅程，都是心灵的诗行</div>
             </div>
         </div>
 
@@ -247,16 +236,6 @@
         </div>
     </div>
 
-    <div id="ticketModal" class="modal" onclick="closeModal(event, 'ticketModal')">
-        <div class="modal-content" onclick="event.stopPropagation()">
-            <div class="modal-header">
-                <span class="modal-title">票务详情</span>
-                <button class="modal-close" onclick="hideModal('ticketModal')">✕</button>
-            </div>
-            <div class="modal-body" id="ticketDetailContent"></div>
-        </div>
-    </div>
-
     <div id="statsModal" class="modal" onclick="closeModal(event, 'statsModal')">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-header">
@@ -281,10 +260,6 @@
                             <div class="stats-item">
                                 <div class="stats-value" id="pendingCount">0</div>
                                 <div class="stats-label">待处理</div>
-                            </div>
-                            <div class="stats-item">
-                                <div class="stats-value" id="ticketCount">0</div>
-                                <div class="stats-label">票务</div>
                             </div>
                         </div>
                     </div>
