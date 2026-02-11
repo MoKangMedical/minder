@@ -14,39 +14,61 @@
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-    <!-- Loading Screen - 唯美启动画面 -->
+    <!-- Loading Screen - 心灵梦境 -->
     <div id="loadingScreen" class="loading-screen">
-        <!-- 浮动粒子背景 -->
-        <div class="loading-particles">
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
-            <div class="particle"></div>
+        <!-- 星光粒子 -->
+        <div class="stars-container">
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
+            <div class="star"></div>
         </div>
         
-        <!-- Logo 和品牌 -->
-        <div class="loading-logo-container">
+        <!-- 漂浮光球 -->
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+        
+        <!-- 核心内容 -->
+        <div class="loading-content">
+            <!-- Logo -->
             <div class="minder-logo">
-                <div class="logo-circle">
-                    <span class="logo-icon">🦋</span>
+                <div class="logo-aura"></div>
+                <div class="logo-inner">
+                    <div class="logo-icon">🦋</div>
                 </div>
             </div>
             
-            <div class="loading-brand">
-                <div class="loading-brand-cn">念念</div>
-                <div class="loading-brand-en">MINDER</div>
-                <div class="loading-slogan">
-                    一念既起，皆为序章<br>
-                    <span style="font-size: 12px; opacity: 0.7;">Every thought is a new beginning</span>
+            <!-- 品牌 -->
+            <div class="brand-container">
+                <div class="brand-cn">念念</div>
+                <div class="brand-en">Minder</div>
+            </div>
+            
+            <!-- Slogan - 心灵寄语 -->
+            <div class="slogan-container">
+                <div class="slogan-text">
+                    <span class="slogan-line">一念既起，皆为序章</span>
+                    <span class="slogan-line">让每一次心动，都有归处</span>
                 </div>
             </div>
         </div>
         
         <!-- 加载进度 -->
         <div class="loading-progress">
-            <div class="loading-progress-bar">
-                <div class="loading-progress-fill"></div>
+            <div class="progress-heart">
+                <span class="heart-beat">💜</span>
+                <span class="progress-text">心灵唤醒中</span>
+                <span class="heart-beat">💜</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill"></div>
             </div>
             <div class="loading-progress-text">正在进入多彩世界...</div>
         </div>
@@ -54,16 +76,16 @@
 
     <!-- Main App -->
     <div id="app" class="app hidden">
-        <!-- Header -->
+        <!-- Header - 梦境导航 -->
         <header class="header">
             <div class="header-content">
-                <div class="header-logo">
-                    <div class="header-logo-icon">🦋</div>
+                <div class="header-brand">
+                    <div class="header-icon">🦋</div>
                     <div class="header-title">念念</div>
                 </div>
                 <div class="header-actions">
-                    <button class="header-btn" onclick="toggleSearch()">🔍</button>
-                    <button class="header-btn" onclick="showStats()">📊</button>
+                    <button class="header-btn" onclick="toggleSearch()" title="搜索">🔍</button>
+                    <button class="header-btn" onclick="showStats()" title="统计">📊</button>
                 </div>
             </div>
         </header>
@@ -105,9 +127,9 @@
             </div>
 
             <div id="emptyState" class="empty-state hidden">
-                <div class="empty-icon">📝</div>
-                <div class="empty-title">还没有念想</div>
-                <div class="empty-subtitle">点击右下角添加你的第一个念想</div>
+                <div class="empty-icon">🌙</div>
+                <div class="empty-title">心静如水</div>
+                <div class="empty-subtitle">捕捉此刻的想法，让美好有迹可循</div>
             </div>
         </div>
 
@@ -134,8 +156,8 @@
             </div>
             <div id="emptyTickets" class="empty-state">
                 <div class="empty-icon">🎫</div>
-                <div class="empty-title">还没有票务</div>
-                <div class="empty-subtitle">上传机票、火车票、电影票自动识别</div>
+                <div class="empty-title">梦想门票</div>
+                <div class="empty-subtitle">每一段旅程，都是心灵的诗行</div>
             </div>
         </div>
 
@@ -198,7 +220,7 @@
                         <div class="bar"></div>
                     </div>
                     <button id="voiceBtn" class="voice-btn" onclick="toggleRecording()">🎤</button>
-                    <p class="voice-hint" id="voiceHint">点击开始录音</p>
+                    <p class="voice-hint" id="voiceHint">轻触，让心声流淌</p>
                 </div>
             </div>
         </div>
@@ -215,7 +237,7 @@
                 <img id="imagePreview" class="image-preview hidden">
                 <div id="imageUploadArea" class="image-upload-area" onclick="selectImage()">
                     <div class="image-upload-icon">📷</div>
-                    <div class="image-upload-text">点击上传图片<br>支持机票、火车票、电影票、取件码</div>
+                    <div class="image-upload-text">轻触上传，捕捉记忆的瞬间<br>票务、取件码，皆是生活印记</div>
                 </div>
                 <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="handleImageSelect(event)">
                 <div style="margin-top: 20px;">

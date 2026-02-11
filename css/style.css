@@ -1,43 +1,57 @@
-/* 念念 Minder - 唯美渐变色设计 */
+/* 念念 Minder - 心灵梦幻版 */
+/* 设计理念：极光流动 · 心灵治愈 · 梦幻唯美 */
+
 :root {
-    /* 主渐变色系 - 来自参考图 */
-    --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    --gradient-sunset: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-    --gradient-ocean: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-    --gradient-forest: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
-    --gradient-warm: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-    --gradient-cool: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
-    --gradient-dream: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
-    --gradient-magic: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    /* 极光渐变色系 */
+    --aurora-1: #E0C3FC;
+    --aurora-2: #8EC5FC;
+    --aurora-3: #FFD1FF;
+    --aurora-4: #A8EDEA;
+    --aurora-5: #FED6E3;
+    --aurora-6: #D299C2;
+    --aurora-7: #FEF9D7;
     
-    /* 功能色 */
-    --primary: #667eea;
-    --primary-light: #8B5CF6;
-    --primary-dark: #5B21B6;
-    --accent-pink: #EC4899;
-    --accent-coral: #F97316;
-    --accent-cyan: #06B6D4;
-    --accent-mint: #10B981;
+    /* 主渐变色 */
+    --gradient-dream: linear-gradient(135deg, #E0C3FC 0%, #8EC5FC 100%);
+    --gradient-sunset: linear-gradient(135deg, #FFD1FF 0%, #FAD0C4 100%);
+    --gradient-ocean: linear-gradient(135deg, #A8EDEA 0%, #FED6E3 100%);
+    --gradient-forest: linear-gradient(135deg, #D299C2 0%, #FEF9D7 100%);
+    --gradient-aurora: linear-gradient(135deg, 
+        #E0C3FC 0%, 
+        #8EC5FC 25%, 
+        #A8EDEA 50%, 
+        #FED6E3 75%, 
+        #FFD1FF 100%
+    );
+    --gradient-heart: linear-gradient(135deg, #FF9A9E 0%, #FECFEF 100%);
     
-    /* 背景色 */
-    --background: linear-gradient(180deg, #faf5ff 0%, #f0f9ff 50%, #f0fdf4 100%);
-    --surface: rgba(255, 255, 255, 0.85);
-    --surface-solid: #FFFFFF;
-    --surface-glass: rgba(255, 255, 255, 0.7);
+    /* 心灵色 */
+    --soul-purple: #9B7EDE;
+    --soul-pink: #FF8FAB;
+    --soul-blue: #7FD1B9;
+    --soul-coral: #FFB4A2;
+    --soul-mint: #B8E0D2;
     
-    /* 文字色 */
-    --text-primary: #1e1b4b;
-    --text-secondary: #6366f1;
-    --text-tertiary: #8B5CF6;
-    --text-muted: #9CA3AF;
+    /* 背景 */
+    --bg-dream: linear-gradient(180deg, 
+        #faf7ff 0%, 
+        #f0f9ff 30%, 
+        #fff5f7 60%, 
+        #f0fff4 100%
+    );
+    --surface-dream: rgba(255, 255, 255, 0.75);
+    --surface-glass: rgba(255, 255, 255, 0.6);
     
-    /* 其他 */
-    --shadow-soft: 0 4px 20px rgba(102, 126, 234, 0.15);
-    --shadow-medium: 0 8px 30px rgba(102, 126, 234, 0.2);
-    --shadow-strong: 0 12px 40px rgba(102, 126, 234, 0.25);
-    --success: #10B981;
-    --warning: #F59E0B;
-    --error: #EF4444;
+    /* 文字 */
+    --text-soul: #4A4A6A;
+    --text-warm: #6B5B73;
+    --text-soft: #9B8AA5;
+    
+    /* 光效 */
+    --glow-soft: 0 4px 20px rgba(224, 195, 252, 0.4);
+    --glow-warm: 0 4px 20px rgba(255, 209, 255, 0.4);
+    --glow-cool: 0 4px 20px rgba(168, 237, 234, 0.4);
+    --shadow-dream: 0 8px 32px rgba(155, 126, 222, 0.15);
 }
 
 * {
@@ -48,20 +62,18 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'SF Pro Text', 'Segoe UI', sans-serif;
-    background: var(--background);
+    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    background: var(--bg-dream);
     background-attachment: fixed;
-    color: var(--text-primary);
+    color: var(--text-soul);
     min-height: 100vh;
     -webkit-font-smoothing: antialiased;
 }
 
-.hidden {
-    display: none !important;
-}
+.hidden { display: none !important; }
 
 /* ============================================
-   LOADING SCREEN - 唯美启动画面
+   启动画面 - 心灵梦境
    ============================================ */
 .loading-screen {
     position: fixed;
@@ -70,14 +82,15 @@ body {
     right: 0;
     bottom: 0;
     background: linear-gradient(135deg, 
-        #667eea 0%, 
-        #764ba2 25%, 
-        #f093fb 50%, 
-        #f5576c 75%,
-        #4facfe 100%
+        #E0C3FC 0%, 
+        #8EC5FC 20%, 
+        #A8EDEA 40%, 
+        #FED6E3 60%, 
+        #FFD1FF 80%,
+        #FAD0C4 100%
     );
-    background-size: 400% 400%;
-    animation: gradientShift 8s ease infinite;
+    background-size: 600% 600%;
+    animation: auroraFlow 20s ease infinite;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -86,233 +99,289 @@ body {
     overflow: hidden;
 }
 
-/* 动态渐变背景 */
-@keyframes gradientShift {
+@keyframes auroraFlow {
     0% { background-position: 0% 50%; }
     50% { background-position: 100% 50%; }
     100% { background-position: 0% 50%; }
 }
 
-/* 浮动粒子效果 */
-.loading-particles {
+/* 星光粒子 */
+.stars-container {
     position: absolute;
     width: 100%;
     height: 100%;
     overflow: hidden;
 }
 
-.particle {
+.star {
     position: absolute;
+    background: white;
     border-radius: 50%;
-    opacity: 0.6;
-    animation: float-up 15s infinite;
+    animation: twinkle 3s ease-in-out infinite;
 }
 
-.particle:nth-child(1) {
-    width: 80px;
-    height: 80px;
-    background: rgba(255, 255, 255, 0.3);
+.star:nth-child(1) { width: 3px; height: 3px; top: 10%; left: 20%; animation-delay: 0s; }
+.star:nth-child(2) { width: 2px; height: 2px; top: 20%; left: 80%; animation-delay: 0.5s; }
+.star:nth-child(3) { width: 4px; height: 4px; top: 15%; left: 50%; animation-delay: 1s; }
+.star:nth-child(4) { width: 2px; height: 2px; top: 30%; left: 30%; animation-delay: 1.5s; }
+.star:nth-child(5) { width: 3px; height: 3px; top: 25%; left: 70%; animation-delay: 2s; }
+.star:nth-child(6) { width: 2px; height: 2px; top: 40%; left: 10%; animation-delay: 0.3s; }
+.star:nth-child(7) { width: 3px; height: 3px; top: 35%; left: 90%; animation-delay: 0.8s; }
+.star:nth-child(8) { width: 2px; height: 2px; top: 45%; left: 45%; animation-delay: 1.3s; }
+.star:nth-child(9) { width: 4px; height: 4px; top: 5%; left: 60%; animation-delay: 1.8s; }
+.star:nth-child(10) { width: 2px; height: 2px; top: 50%; left: 25%; animation-delay: 2.3s; }
+
+@keyframes twinkle {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.2); box-shadow: 0 0 10px rgba(255,255,255,0.8); }
+}
+
+/* 漂浮光球 */
+.orb {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.6;
+    animation: orbFloat 15s ease-in-out infinite;
+}
+
+.orb-1 {
+    width: 200px;
+    height: 200px;
+    background: rgba(224, 195, 252, 0.8);
+    top: 20%;
     left: 10%;
     animation-delay: 0s;
 }
 
-.particle:nth-child(2) {
-    width: 120px;
-    height: 120px;
-    background: rgba(255, 154, 158, 0.4);
-    left: 30%;
-    animation-delay: 2s;
-}
-
-.particle:nth-child(3) {
-    width: 60px;
-    height: 60px;
-    background: rgba(79, 172, 254, 0.5);
-    left: 50%;
-    animation-delay: 4s;
-}
-
-.particle:nth-child(4) {
-    width: 100px;
-    height: 100px;
-    background: rgba(67, 233, 123, 0.3);
-    left: 70%;
-    animation-delay: 6s;
-}
-
-.particle:nth-child(5) {
+.orb-2 {
     width: 150px;
     height: 150px;
-    background: rgba(250, 112, 154, 0.2);
-    left: 85%;
-    animation-delay: 8s;
+    background: rgba(168, 237, 234, 0.8);
+    top: 60%;
+    right: 15%;
+    animation-delay: -5s;
 }
 
-@keyframes float-up {
-    0% {
-        transform: translateY(100vh) scale(0);
-        opacity: 0;
-    }
-    10% {
-        opacity: 0.6;
-    }
-    90% {
-        opacity: 0.6;
-    }
-    100% {
-        transform: translateY(-100vh) scale(1.5);
-        opacity: 0;
-    }
+.orb-3 {
+    width: 180px;
+    height: 180px;
+    background: rgba(255, 209, 255, 0.8);
+    bottom: 20%;
+    left: 30%;
+    animation-delay: -10s;
 }
 
-/* Logo 容器 */
-.loading-logo-container {
+@keyframes orbFloat {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    33% { transform: translate(30px, -30px) scale(1.1); }
+    66% { transform: translate(-20px, 20px) scale(0.9); }
+}
+
+/* 核心内容区 */
+.loading-content {
     position: relative;
     z-index: 10;
     text-align: center;
+    padding: 40px;
 }
 
-/* 念念 Logo */
+/* 念念 Logo - 心灵之眼 */
 .minder-logo {
-    width: 120px;
-    height: 120px;
-    margin: 0 auto 30px;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto 40px;
     position: relative;
-    animation: logoFloat 3s ease-in-out infinite;
+    animation: logoHeartbeat 2s ease-in-out infinite;
 }
 
-@keyframes logoFloat {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-15px); }
+@keyframes logoHeartbeat {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
 }
 
-.logo-circle {
+.logo-inner {
     width: 100%;
     height: 100%;
-    background: linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%);
-    border-radius: 30px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     box-shadow: 
-        0 20px 60px rgba(0,0,0,0.2),
-        inset 0 2px 10px rgba(255,255,255,0.5);
-    backdrop-filter: blur(10px);
+        0 20px 60px rgba(155, 126, 222, 0.3),
+        inset 0 2px 10px rgba(255,255,255,0.8),
+        0 0 0 1px rgba(255,255,255,0.5);
+    backdrop-filter: blur(20px);
     position: relative;
     overflow: hidden;
 }
 
-.logo-circle::before {
+.logo-inner::before {
     content: '';
     position: absolute;
-    top: -50%;
-    left: -50%;
-    width: 200%;
-    height: 200%;
-    background: linear-gradient(
-        45deg,
-        transparent 30%,
-        rgba(255,255,255,0.3) 50%,
-        transparent 70%
-    );
-    animation: logoShine 3s infinite;
-}
-
-@keyframes logoShine {
-    0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-    100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    inset: 0;
+    background: var(--gradient-aurora);
+    opacity: 0.1;
 }
 
 .logo-icon {
-    font-size: 60px;
+    font-size: 70px;
     z-index: 1;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));
+    filter: drop-shadow(0 4px 8px rgba(155, 126, 222, 0.3));
+    animation: iconGlow 3s ease-in-out infinite;
 }
 
-/* 品牌文字 */
-.loading-brand {
-    position: relative;
-    z-index: 10;
+@keyframes iconGlow {
+    0%, 100% { filter: drop-shadow(0 4px 8px rgba(155, 126, 222, 0.3)); }
+    50% { filter: drop-shadow(0 4px 20px rgba(155, 126, 222, 0.6)); }
 }
 
-.loading-brand-cn {
-    font-size: 48px;
-    font-weight: 800;
-    color: white;
-    letter-spacing: 8px;
-    margin-bottom: 8px;
-    text-shadow: 0 4px 20px rgba(0,0,0,0.2);
-    animation: textGlow 2s ease-in-out infinite;
+/* Logo 呼吸光环 */
+.logo-aura {
+    position: absolute;
+    inset: -20px;
+    border-radius: 50px;
+    background: var(--gradient-aurora);
+    opacity: 0.3;
+    filter: blur(30px);
+    animation: auraBreathe 3s ease-in-out infinite;
+    z-index: -1;
 }
 
-@keyframes textGlow {
-    0%, 100% { 
-        text-shadow: 0 4px 20px rgba(0,0,0,0.2), 0 0 30px rgba(255,255,255,0.3);
-    }
-    50% { 
-        text-shadow: 0 4px 20px rgba(0,0,0,0.2), 0 0 50px rgba(255,255,255,0.6);
-    }
+@keyframes auraBreathe {
+    0%, 100% { opacity: 0.2; transform: scale(1); }
+    50% { opacity:0.4; transform: scale(1.1); }
 }
 
-.loading-brand-en {
-    font-size: 18px;
-    font-weight: 500;
-    color: rgba(255,255,255,0.9);
-    letter-spacing: 4px;
-    margin-bottom: 20px;
-    text-transform: uppercase;
+/* 品牌文字 - 心灵之语 */
+.brand-container {
+    margin-bottom: 30px;
 }
 
-.loading-slogan {
-    font-size: 14px;
-    color: rgba(255,255,255,0.8);
-    max-width: 280px;
-    line-height: 1.8;
-    margin: 0 auto;
+.brand-cn {
+    font-size: 52px;
     font-weight: 300;
+    color: white;
+    letter-spacing: 20px;
+    margin-bottom: 12px;
+    text-shadow: 0 4px 20px rgba(0,0,0,0.1);
+    font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    animation: textFloat 4s ease-in-out infinite;
 }
 
-/* 加载进度 */
+@keyframes textFloat {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-5px); }
+}
+
+.brand-en {
+    font-size: 16px;
+    font-weight: 400;
+    color: rgba(255,255,255,0.9);
+    letter-spacing: 8px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+}
+
+/* Slogan - 心灵寄语 */
+.slogan-container {
+    max-width: 320px;
+    margin: 0 auto;
+    padding: 24px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.3);
+}
+
+.slogan-text {
+    font-size: 15px;
+    color: rgba(255,255,255,0.95);
+    line-height: 2;
+    font-weight: 300;
+    letter-spacing: 2px;
+}
+
+.slogan-line {
+    display: block;
+    margin-bottom: 8px;
+}
+
+.slogan-line:last-child {
+    margin-bottom: 0;
+}
+
+/* 加载进度 - 心灵律动 */
 .loading-progress {
     position: absolute;
-    bottom: 60px;
+    bottom: 80px;
     left: 50%;
     transform: translateX(-50%);
-    width: 200px;
+    width: 180px;
     z-index: 10;
 }
 
-.loading-progress-bar {
+.progress-heart {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.heart-beat {
+    font-size: 20px;
+    animation: heartbeat 1.2s ease-in-out infinite;
+}
+
+@keyframes heartbeat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.1); }
+    50% { transform: scale(1); }
+    75% { transform: scale(1.1); }
+}
+
+.progress-text {
+    font-size: 12px;
+    color: rgba(255,255,255,0.8);
+    letter-spacing: 3px;
+}
+
+.progress-bar {
     height: 3px;
     background: rgba(255,255,255,0.2);
     border-radius: 3px;
     overflow: hidden;
 }
 
-.loading-progress-fill {
+.progress-fill {
     height: 100%;
     width: 0%;
-    background: linear-gradient(90deg, #fff 0%, rgba(255,255,255,0.5) 100%);
+    background: linear-gradient(90deg, 
+        rgba(255,255,255,0.8) 0%, 
+        rgba(255,209,255,0.8) 50%,
+        rgba(255,255,255,0.8) 100%
+    );
     border-radius: 3px;
-    animation: progressFill 2s ease forwards;
+    animation: progressFlow 2s ease forwards;
+    box-shadow: 0 0 10px rgba(255,255,255,0.5);
 }
 
-@keyframes progressFill {
+@keyframes progressFlow {
     0% { width: 0%; }
     100% { width: 100%; }
 }
 
-.loading-progress-text {
-    text-align: center;
-    color: rgba(255,255,255,0.7);
-    font-size: 12px;
-    margin-top: 10px;
-    letter-spacing: 2px;
+/* ============================================
+   主界面 - 梦境延续
+   ============================================ */
+.app {
+    min-height: 100vh;
+    padding-bottom: 120px;
 }
 
-/* ============================================
-   APP HEADER - 玻璃拟态风格
-   ============================================ */
+/* 头部 - 梦幻玻璃 */
 .header {
     background: var(--surface-glass);
     backdrop-filter: blur(20px);
@@ -321,8 +390,8 @@ body {
     position: sticky;
     top: 0;
     z-index: 100;
-    border-bottom: 1px solid rgba(255,255,255,0.5);
-    box-shadow: var(--shadow-soft);
+    border-bottom: 1px solid rgba(255,255,255,0.6);
+    box-shadow: var(--shadow-dream);
 }
 
 .header-content {
@@ -331,68 +400,69 @@ body {
     align-items: center;
 }
 
-.header-logo {
+.header-brand {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 12px;
 }
 
-.header-logo-icon {
-    width: 36px;
-    height: 36px;
-    background: var(--gradient-magic);
-    border-radius: 10px;
+.header-icon {
+    width: 38px;
+    height: 38px;
+    background: var(--gradient-dream);
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+    font-size: 20px;
+    box-shadow: 0 4px 12px rgba(224, 195, 252, 0.4);
 }
 
 .header-title {
-    font-size: 20px;
-    font-weight: 700;
-    background: var(--gradient-magic);
+    font-size: 22px;
+    font-weight: 300;
+    background: var(--gradient-aurora);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    letter-spacing: 2px;
 }
 
 .header-actions {
     display: flex;
-    gap: 12px;
+    gap: 10px;
 }
 
 .header-btn {
-    width: 40px;
-    height: 40px;
+    width: 42px;
+    height: 42px;
     border: none;
-    background: rgba(255,255,255,0.6);
-    border-radius: 12px;
+    background: rgba(255,255,255,0.7);
+    border-radius: 14px;
     font-size: 18px;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
     transition: all 0.3s;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 8px rgba(155, 126, 222, 0.1);
 }
 
 .header-btn:hover {
     background: white;
     transform: translateY(-2px);
-    box-shadow: var(--shadow-soft);
+    box-shadow: var(--glow-soft);
 }
 
 /* ============================================
-   VIEW TABS - 渐变标签
+   标签页 - 梦境切换
    ============================================ */
 .view-tabs {
     display: flex;
     background: var(--surface-glass);
     backdrop-filter: blur(10px);
     padding: 8px 16px 0;
-    gap: 8px;
+    gap: 6px;
     border-bottom: 1px solid rgba(255,255,255,0.5);
 }
 
@@ -402,160 +472,179 @@ body {
     border: none;
     background: transparent;
     font-size: 14px;
-    font-weight: 600;
-    color: var(--text-muted);
+    font-weight: 500;
+    color: var(--text-soft);
     cursor: pointer;
     position: relative;
     transition: all 0.3s;
-    border-radius: 12px 12px 0 0;
+    border-radius: 16px 16px 0 0;
+    font-family: 'PingFang SC', sans-serif;
 }
 
 .view-tab:hover {
-    color: var(--text-secondary);
-    background: rgba(102, 126, 234, 0.05);
+    color: var(--soul-purple);
+    background: rgba(224, 195, 252, 0.1);
 }
 
 .view-tab.active {
     color: white;
-    background: var(--gradient-primary);
-    box-shadow: 0 -4px 20px rgba(102, 126, 234, 0.3);
+    background: var(--gradient-dream);
+    box-shadow: 0 -4px 20px rgba(224, 195, 252, 0.4);
 }
 
 /* ============================================
-   INPUT METHODS - 渐变卡片
+   输入方式 - 心灵入口
    ============================================ */
 .input-methods {
     display: flex;
     gap: 12px;
     padding: 16px 20px;
-    margin-bottom: 8px;
 }
 
 .input-method-btn {
     flex: 1;
-    padding: 20px 16px;
+    padding: 24px 16px;
     border: none;
-    background: var(--surface);
-    border-radius: 20px;
+    background: var(--surface-dream);
+    border-radius: 24px;
     cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 10px;
-    box-shadow: var(--shadow-soft);
+    gap: 12px;
+    box-shadow: var(--shadow-dream);
+    border: 1px solid rgba(255,255,255,0.6);
 }
 
 .input-method-btn:hover {
-    transform: translateY(-4px);
-    box-shadow: var(--shadow-medium);
-}
-
-.input-method-btn:active {
-    transform: translateY(-2px);
+    transform: translateY(-6px);
+    box-shadow: var(--glow-soft);
 }
 
 .input-method-icon {
-    width: 56px;
-    height: 56px;
-    border-radius: 16px;
+    width: 60px;
+    height: 60px;
+    border-radius: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 28px;
-    transition: transform 0.3s;
+    transition: all 0.3s;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
 }
 
 .input-method-btn:nth-child(1) .input-method-icon {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: var(--gradient-dream);
 }
 
 .input-method-btn:nth-child(2) .input-method-icon {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    background: var(--gradient-sunset);
 }
 
 .input-method-btn:nth-child(3) .input-method-icon {
-    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    background: var(--gradient-ocean);
 }
 
 .input-method-btn:hover .input-method-icon {
-    transform: scale(1.1) rotate(5deg);
+    transform: scale(1.15) rotate(8deg);
 }
 
 .input-method-label {
     font-size: 13px;
-    font-weight: 600;
-    color: var(--text-primary);
+    font-weight: 500;
+    color: var(--text-warm);
+    letter-spacing: 1px;
 }
 
 /* ============================================
-   TIMELINE ITEMS - 玻璃卡片
+   时间线卡片 - 心灵碎片
    ============================================ */
 .timeline-container {
-    padding: 12px 20px 100px;
+    padding: 12px 20px 120px;
 }
 
 .timeline-date {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text-secondary);
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--soul-purple);
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin: 20px 0 12px;
+    letter-spacing: 2px;
+    margin: 24px 0 12px;
     padding-left: 8px;
+    opacity: 0.8;
 }
 
 .timeline-item {
-    background: var(--surface);
-    border-radius: 20px;
-    margin-bottom: 12px;
+    background: var(--surface-dream);
+    border-radius: 24px;
+    margin-bottom: 14px;
     overflow: hidden;
-    box-shadow: var(--shadow-soft);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 1px solid rgba(255,255,255,0.5);
+    box-shadow: var(--shadow-dream);
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 1px solid rgba(255,255,255,0.6);
 }
 
 .timeline-item:hover {
-    transform: translateY(-3px);
-    box-shadow: var(--shadow-medium);
+    transform: translateY(-4px);
+    box-shadow: var(--glow-soft);
 }
 
 .card {
-    padding: 16px;
+    padding: 18px;
     display: flex;
     align-items: flex-start;
-    gap: 14px;
+    gap: 16px;
 }
 
 .card-icon {
-    width: 44px;
-    height: 44px;
-    border-radius: 12px;
+    width: 48px;
+    height: 48px;
+    border-radius: 16px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 22px;
+    font-size: 24px;
     flex-shrink: 0;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.08);
 }
 
-.card-icon.todo { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-.card-icon.event { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
-.card-icon.ticket { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
-.card-icon.pickup { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
-.card-icon.note { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.card-icon.todo { background: var(--gradient-dream); }
+.card-icon.event { background: var(--gradient-sunset); }
+.card-icon.ticket { background: var(--gradient-forest); }
+.card-icon.pickup { background: var(--gradient-ocean); }
+.card-icon.note { background: var(--gradient-heart); }
+
+.card-content {
+    flex: 1;
+}
+
+.card-title {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--text-soul);
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+.card-time {
+    font-size: 12px;
+    color: var(--soul-purple);
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
 
 /* ============================================
-   TICKET CARDS - 精美票务
+   票务卡片 - 梦想门票
    ============================================ */
 .ticket-card {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+    background: var(--gradient-aurora);
     color: white;
-    padding: 24px;
-    border-radius: 20px;
+    padding: 28px;
+    border-radius: 24px;
     position: relative;
     overflow: hidden;
-    box-shadow: var(--shadow-medium);
+    box-shadow: var(--shadow-dream);
 }
 
 .ticket-card::before {
@@ -565,89 +654,75 @@ body {
     right: -30%;
     width: 300px;
     height: 300px;
-    background: rgba(255,255,255,0.1);
-    border-radius: 50%;
-}
-
-.ticket-card::after {
-    content: '';
-    position: absolute;
-    bottom: -30%;
-    left: -20%;
-    width: 200px;
-    height: 200px;
-    background: rgba(255,255,255,0.05);
+    background: rgba(255,255,255,0.15);
     border-radius: 50%;
 }
 
 .ticket-type {
-    font-size: 11px;
-    font-weight: 700;
+    font-size: 10px;
+    font-weight: 600;
     text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
     opacity: 0.9;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
     position: relative;
-    z-index: 1;
 }
 
 .ticket-title {
-    font-size: 22px;
-    font-weight: 700;
-    margin-bottom: 6px;
+    font-size: 24px;
+    font-weight: 300;
+    margin-bottom: 8px;
     position: relative;
-    z-index: 1;
 }
 
 .ticket-info {
     font-size: 14px;
     opacity: 0.9;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     position: relative;
-    z-index: 1;
+    font-weight: 300;
 }
 
 .ticket-barcode {
     background: rgba(255,255,255,0.95);
-    padding: 16px;
-    border-radius: 12px;
+    padding: 20px;
+    border-radius: 16px;
     text-align: center;
     position: relative;
-    z-index: 1;
     backdrop-filter: blur(10px);
 }
 
 .ticket-code {
     font-family: 'SF Mono', monospace;
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--text-primary);
-    letter-spacing: 3px;
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--text-soul);
+    letter-spacing: 4px;
 }
 
 /* ============================================
-   FAB - 渐变悬浮按钮
+   FAB - 心灵召唤
    ============================================ */
 .fab-container {
     position: fixed;
-    bottom: 24px;
-    right: 24px;
+    bottom: 28px;
+    right: 28px;
     z-index: 100;
 }
 
 .fab {
-    width: 60px;
-    height: 60px;
+    width: 64px;
+    height: 64px;
     border: none;
     border-radius: 50%;
-    background: var(--gradient-magic);
+    background: var(--gradient-dream);
     color: white;
     font-size: 28px;
     cursor: pointer;
     box-shadow: 
-        0 8px 20px rgba(102, 126, 234, 0.4),
-        0 4px 10px rgba(0,0,0,0.1);
-    transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        0 8px 24px rgba(224, 195, 252, 0.5),
+        0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -657,196 +732,156 @@ body {
 .fab::before {
     content: '';
     position: absolute;
-    inset: -3px;
+    inset: -4px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+    background: var(--gradient-aurora);
     z-index: -1;
-    opacity: 0.5;
-    filter: blur(8px);
-    transition: all 0.3s;
+    opacity: 0.4;
+    filter: blur(12px);
+    animation: fabPulse 2s ease-in-out infinite;
+}
+
+@keyframes fabPulse {
+    0%, 100% { opacity: 0.3; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(1.1); }
 }
 
 .fab:hover {
-    transform: scale(1.1);
-}
-
-.fab:hover::before {
-    opacity: 0.8;
-    filter: blur(12px);
-}
-
-.fab.expanded {
-    transform: rotate(45deg) scale(1.1);
+    transform: scale(1.15);
 }
 
 /* ============================================
-   MODALS - 玻璃拟态弹窗
+   弹窗 - 梦境入口
    ============================================ */
 .modal-content {
     background: var(--surface-glass);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border-radius: 24px 24px 0 0;
-    border: 1px solid rgba(255,255,255,0.5);
-    box-shadow: 0 -10px 40px rgba(0,0,0,0.1);
+    backdrop-filter: blur(30px);
+    -webkit-backdrop-filter: blur(30px);
+    border-radius: 28px 28px 0 0;
+    border: 1px solid rgba(255,255,255,0.6);
+    box-shadow: 0 -10px 40px rgba(155, 126, 222, 0.15);
 }
 
 .btn-primary {
-    background: var(--gradient-primary);
+    background: var(--gradient-dream);
     color: white;
-    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    box-shadow: 0 6px 20px rgba(224, 195, 252, 0.5);
+    border-radius: 16px;
+    font-weight: 500;
+    letter-spacing: 1px;
 }
 
-.btn-primary:hover {
-    box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
-    transform: translateY(-1px);
+/* 文本输入框 */
+.text-input-area {
+    background: rgba(255,255,255,0.6);
+    border-radius: 20px;
+    border: 1px solid rgba(255,255,255,0.8);
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.03);
 }
 
 /* ============================================
-   STATS & OTHER COMPONENTS
+   空状态 - 心灵等待
    ============================================ */
-.stats-card {
-    background: var(--surface);
-    border-radius: 20px;
-    padding: 20px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow-soft);
-    border: 1px solid rgba(255,255,255,0.5);
-}
-
-.stats-value {
-    background: var(--gradient-magic);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-/* Empty state */
 .empty-state {
     text-align: center;
-    padding: 60px 20px;
+    padding: 80px 20px;
 }
 
 .empty-icon {
-    font-size: 80px;
-    margin-bottom: 20px;
-    opacity: 0.5;
-    animation: emptyFloat 3s ease-in-out infinite;
-    filter: drop-shadow(0 10px 20px rgba(102, 126, 234, 0.2));
+    font-size: 100px;
+    margin-bottom: 24px;
+    opacity: 0.6;
+    animation: emptyFloat 4s ease-in-out infinite;
+    filter: drop-shadow(0 10px 30px rgba(224, 195, 252, 0.3));
 }
 
-/* Search bar */
-.search-bar {
-    background: var(--surface);
-    border-radius: 14px;
-    padding: 12px 16px;
-    box-shadow: var(--shadow-soft);
-    border: 1px solid rgba(255,255,255,0.5);
+@keyframes emptyFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-15px) rotate(5deg); }
 }
 
-/* Calendar */
-.calendar-day.today {
-    background: var(--gradient-primary);
-    color: white;
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+.empty-title {
+    font-size: 20px;
+    font-weight: 300;
+    color: var(--text-warm);
+    margin-bottom: 8px;
+    letter-spacing: 2px;
 }
 
-/* Voice recorder */
-.voice-btn {
-    background: var(--gradient-primary);
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+.empty-subtitle {
+    font-size: 14px;
+    color: var(--text-soft);
+    font-weight: 300;
 }
 
-.voice-btn.recording {
-    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+/* ============================================
+   动画效果
+   ============================================ */
+
+/* 礼花 - 梦境色彩 */
+.confetti:nth-child(6n+1) { background: #E0C3FC; }
+.confetti:nth-child(6n+2) { background: #8EC5FC; }
+.confetti:nth-child(6n+3) { background: #FFD1FF; }
+.confetti:nth-child(6n+4) { background: #A8EDEA; }
+.confetti:nth-child(6n+5) { background: #FED6E3; }
+.confetti:nth-child(6n+6) { background: #D299C2; }
+
+/* 完成庆祝 */
+.checkmark-celebration {
+    background: var(--gradient-ocean);
 }
 
-/* Result container */
-.result-container {
-    background: rgba(255,255,255,0.5);
-    border-radius: 16px;
-    border: 1px solid rgba(255,255,255,0.5);
+/* 连击 */
+.streak-counter {
+    background: var(--gradient-sunset);
 }
 
-.result-icon {
-    background: var(--gradient-primary);
-}
-
-/* Achievement popup */
+/* 成就 */
 .achievement-popup {
-    background: var(--surface);
-    border-left: 4px solid var(--accent-pink);
-    box-shadow: var(--shadow-strong);
+    background: var(--surface-dream);
+    border-left: 4px solid var(--soul-pink);
 }
 
 /* Toast */
 .toast {
-    background: rgba(30, 27, 75, 0.95);
-    backdrop-filter: blur(10px);
-    border-radius: 16px;
-    box-shadow: var(--shadow-strong);
+    background: rgba(74, 74, 106, 0.95);
+    backdrop-filter: blur(20px);
+    border-radius: 20px;
 }
 
-/* Loading animation for AI */
-.ai-thinking .dot {
-    background: var(--primary);
-}
-
-/* Confetti colors updated */
-.confetti:nth-child(5n+1) { background: #667eea; border-bottom-color: #667eea; }
-.confetti:nth-child(5n+2) { background: #f093fb; border-bottom-color: #f093fb; }
-.confetti:nth-child(5n+3) { background: #4facfe; border-bottom-color: #4facfe; }
-.confetti:nth-child(5n+4) { background: #43e97b; border-bottom-color: #43e97b; }
-.confetti:nth-child(5n+5) { background: #fa709a; border-bottom-color: #fa709a; }
-
-/* Responsive adjustments */
+/* 响应式 */
 @media (max-width: 380px) {
-    .loading-brand-cn {
-        font-size: 36px;
-        letter-spacing: 6px;
+    .brand-cn {
+        font-size: 40px;
+        letter-spacing: 12px;
+    }
+    
+    .minder-logo {
+        width: 120px;
+        height: 120px;
     }
     
     .input-methods {
         flex-direction: column;
     }
-    
-    .minder-logo {
-        width: 100px;
-        height: 100px;
-    }
-    
-    .logo-icon {
-        font-size: 48px;
-    }
 }
 
-/* Dark mode support */
+/* 深色模式适配 */
 @media (prefers-color-scheme: dark) {
     :root {
-        --background: linear-gradient(180deg, #1e1b4b 0%, #312e81 50%, #1e3a5f 100%);
-        --surface: rgba(30, 27, 75, 0.9);
-        --surface-glass: rgba(30, 27, 75, 0.8);
-        --text-primary: #f8fafc;
-        --text-secondary: #a5b4fc;
-    }
-    
-    .header {
-        background: rgba(30, 27, 75, 0.8);
+        --bg-dream: linear-gradient(180deg, #2D2B55 0%, #1E1B3A 50%, #1A1638 100%);
+        --surface-dream: rgba(45, 43, 85, 0.85);
+        --surface-glass: rgba(45, 43, 85, 0.7);
+        --text-soul: #E8E6F3;
+        --text-warm: #C9C5E0;
     }
 }
 
-/* Animation for new items - enhanced */
-@keyframes slideIn {
-    from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.95);
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-.timeline-item.new {
-    animation: slideIn 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
