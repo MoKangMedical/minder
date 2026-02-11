@@ -19,14 +19,31 @@ let selectedImage = null;
 
 // Initialize
 window.onload = function() {
-    setTimeout(() => {
-        document.getElementById('loadingScreen').style.opacity = '0';
-        setTimeout(() => {
-            document.getElementById('loadingScreen').classList.add('hidden');
-            document.getElementById('app').classList.remove('hidden');
-            initApp();
-        }, 400);
-    }, 1500);
+    // Simulate loading progress
+    let progress = 0;
+    const loadingInterval = setInterval(() => {
+        progress += Math.random() * 15;
+        if (progress >= 100) {
+            progress = 100;
+            clearInterval(loadingInterval);
+            
+            setTimeout(() => {
+                document.getElementById('loadingScreen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('loadingScreen').classList.add('hidden');
+                    document.getElementById('app').classList.remove('hidden');
+                    initApp();
+                    
+                    // Welcome animation for first visit
+                    if (items.length === 0) {
+                        setTimeout(() => {
+                            showToast('👋 欢迎使用念念！点击右下角添加任务');
+                        }, 500);
+                    }
+                }, 400);
+            }, 500);
+        }
+    }, 100);
 };
 
 function initApp() {
@@ -639,21 +656,36 @@ function showResultModal(result) {
 function saveResult() {
     if (!currentParsedResult) return;
     
-    items.push({
+    const newItem = {
         ...currentParsedResult,
         completed: false,
         createdAt: Date.now()
-    });
+    };
     
+    items.push(newItem);
     saveItems();
     hideModal('resultModal');
-    showToast('已保存');
     
-    // Refresh current view
+    // Refresh current view with animation
     if (currentView === 'timeline') {
         renderTimeline();
+        // Add animation to the new item
+        setTimeout(() => {
+            const newItemElement = document.querySelector(`[data-id="${newItem.id}"]`);
+            if (newItemElement) {
+                newItemElement.classList.add('new');
+                newItemElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 100);
     } else if (currentView === 'tickets') {
         renderTickets();
+    }
+    
+    // Show celebration for first task
+    if (items.length === 1) {
+        showAchievement('欢迎!', '添加了第一个任务，开始你的效率之旅!', '🎉');
+    } else {
+        showToast('已保存 ✨');
     }
     
     // Reset
@@ -661,30 +693,226 @@ function saveResult() {
     currentParsedResult = null;
 }
 
+// Celebration Effects
+function createConfetti() {
+    const colors = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8', '#FFD93D', '#FF6B9D', '#C44569'];
+    const container = document.createElement('div');
+    container.className = 'confetti-container';
+    document.body.appendChild(container);
+    
+    // Create 50 confetti pieces
+    for (let i = 0; i < 50; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        
+        // Random shape
+        const shapes = ['square', 'circle', 'triangle'];
+        confetti.classList.add(shapes[Math.floor(Math.random() * shapes.length)]);
+        
+        // Random position
+        confetti.style.left = Math.random() * 100 + '%';
+        
+        // Random color
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        if (confetti.classList.contains('triangle')) {
+            confetti.style.borderBottomColor = colors[Math.floor(Math.random() * colors.length)];
+        }
+        
+        // Random animation duration and delay
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+        
+        // Random rotation
+        confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+        
+        container.appendChild(confetti);
+    }
+    
+    // Remove after animation
+    setTimeout(() => {
+        container.remove();
+    }, 3500);
+}
+
+function showCheckmarkCelebration() {
+    const checkmark = document.createElement('div');
+    checkmark.className = 'checkmark-celebration';
+    document.body.appendChild(checkmark);
+    
+    setTimeout(() => {
+        checkmark.remove();
+    }, 1500);
+}
+
+function showStreakCounter(count) {
+    const streak = document.createElement('div');
+    streak.className = 'streak-counter';
+    streak.innerHTML = `
+        <div class="streak-text">
+            <span>连续完成</span>
+            <span class="streak-number">${count}</span>
+            <span>个任务!</span>
+        </div>
+    `;
+    document.body.appendChild(streak);
+    
+    setTimeout(() => {
+        streak.remove();
+    }, 2000);
+}
+
+function showAchievement(title, description, icon = '🏆') {
+    const achievement = document.createElement('div');
+    achievement.className = 'achievement-popup';
+    achievement.innerHTML = `
+        <div class="achievement-icon">${icon}</div>
+        <div class="achievement-text">
+            <div class="achievement-title">${title}</div>
+            <div class="achievement-desc">${description}</div>
+        </div>
+    `;
+    document.body.appendChild(achievement);
+    
+    setTimeout(() => {
+        achievement.remove();
+    }, 4000);
+}
+
+// Calculate today's completed streak
+function getTodayStreak() {
+    const today = new Date().toDateString();
+    const todayItems = items.filter(i => {
+        if (!i.completed || !i.completedAt) return false;
+        return new Date(i.completedAt).toDateString() === today;
+    });
+    return todayItems.length;
+}
+
+// Check for achievements
+function checkAchievements() {
+    const totalCompleted = items.filter(i => i.completed).length;
+    const todayStreak = getTodayStreak();
+    
+    // First task achievement
+    if (totalCompleted === 1) {
+        showAchievement('初次完成!', '完成了第一个任务，继续保持!', '🌟');
+    }
+    // 5 tasks milestone
+    else if (totalCompleted === 5) {
+        showAchievement('里程碑!', '已完成5个任务，效率惊人!', '🚀');
+    }
+    // 10 tasks milestone
+    else if (totalCompleted === 10) {
+        showAchievement('任务达人!', '已完成10个任务，太棒了!', '💎');
+    }
+    // Daily streaks
+    else if (todayStreak === 3) {
+        showAchievement('三连击!', '今天已完成3个任务!', '🔥');
+    }
+    else if (todayStreak === 5) {
+        showAchievement('效率之王!', '今天已完成5个任务!', '👑');
+    }
+    else if (todayStreak === 10) {
+        showAchievement('今日完美!', '已完成10个任务，不可思议!', '🌈');
+    }
+}
+
 // Item Actions
 function completeItem(id) {
     const item = items.find(i => i.id === id);
     if (item) {
-        item.completed = true;
-        item.completedAt = Date.now();
-        saveItems();
-        renderTimeline();
-        showToast('已完成 ✓');
+        // Add completing animation class
+        const itemElement = document.querySelector(`[data-id="${id}"]`);
+        if (itemElement) {
+            itemElement.classList.add('completing');
+        }
+        
+        // Wait for animation then complete
+        setTimeout(() => {
+            item.completed = true;
+            item.completedAt = Date.now();
+            saveItems();
+            
+            // Trigger celebration effects
+            createConfetti();
+            showCheckmarkCelebration();
+            
+            // Show streak if multiple completed today
+            const todayStreak = getTodayStreak();
+            if (todayStreak > 1 && todayStreak % 3 === 0) {
+                showStreakCounter(todayStreak);
+            }
+            
+            // Check for achievements
+            checkAchievements();
+            
+            // Refresh view
+            renderTimeline();
+            showToast('已完成 ✨');
+        }, 300);
     }
 }
 
+// Ripple effect for buttons
+function createRipple(e, button) {
+    const ripple = document.createElement('span');
+    ripple.className = 'ripple';
+    
+    const rect = button.getBoundingClientRect();
+    const size = Math.max(rect.width, rect.height);
+    
+    ripple.style.width = ripple.style.height = size + 'px';
+    ripple.style.left = e.clientX - rect.left - size / 2 + 'px';
+    ripple.style.top = e.clientY - rect.top - size / 2 + 'px';
+    
+    button.appendChild(ripple);
+    
+    setTimeout(() => {
+        ripple.remove();
+    }, 600);
+}
+
+// Add ripple to all buttons
+document.addEventListener('click', function(e) {
+    const button = e.target.closest('button');
+    if (button && !button.classList.contains('no-ripple')) {
+        createRipple(e, button);
+    }
+});
+
 function deleteItem(id) {
-    if (confirm('确定要删除吗？')) {
-        items = items.filter(i => i.id !== id);
-        saveItems();
+    // Add deleting animation
+    const itemElement = document.querySelector(`[data-id="${id}"]`);
+    if (itemElement) {
+        itemElement.classList.add('deleting');
         
-        if (currentView === 'timeline') {
-            renderTimeline();
-        } else if (currentView === 'tickets') {
-            renderTickets();
+        // Wait for animation then delete
+        setTimeout(() => {
+            items = items.filter(i => i.id !== id);
+            saveItems();
+            
+            if (currentView === 'timeline') {
+                renderTimeline();
+            } else if (currentView === 'tickets') {
+                renderTickets();
+            }
+            
+            showToast('已删除');
+        }, 300);
+    } else {
+        // Fallback if element not found
+        if (confirm('确定要删除吗？')) {
+            items = items.filter(i => i.id !== id);
+            saveItems();
+            
+            if (currentView === 'timeline') {
+                renderTimeline();
+            } else if (currentView === 'tickets') {
+                renderTickets();
+            }
+            
+            showToast('已删除');
         }
-        
-        showToast('已删除');
     }
 }
 
@@ -850,3 +1078,89 @@ if ('serviceWorker' in navigator) {
 if ('Notification' in window && Notification.permission === 'default') {
     Notification.requestPermission();
 }
+
+// Keyboard shortcuts
+document.addEventListener('keydown', function(e) {
+    // Escape to close modals
+    if (e.key === 'Escape') {
+        const modals = document.querySelectorAll('.modal.show');
+        modals.forEach(modal => modal.classList.remove('show'));
+    }
+    
+    // Ctrl/Cmd + N for new task
+    if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+        e.preventDefault();
+        showTextModal();
+    }
+    
+    // Ctrl/Cmd + F for search
+    if ((e.ctrlKey || e.metaKey) && e.key === 'f') {
+        e.preventDefault();
+        toggleSearch();
+    }
+    
+    // Ctrl/Cmd + 1/2/3 for view switching
+    if ((e.ctrlKey || e.metaKey) && e.key >= '1' && e.key <= '3') {
+        e.preventDefault();
+        const views = ['timeline', 'calendar', 'tickets'];
+        const viewIndex = parseInt(e.key) - 1;
+        if (views[viewIndex]) {
+            switchView(views[viewIndex]);
+        }
+    }
+});
+
+// Add haptic feedback for mobile (if supported)
+function hapticFeedback(type = 'light') {
+    if ('vibrate' in navigator) {
+        const patterns = {
+            light: 10,
+            medium: 20,
+            heavy: 30,
+            success: [10, 50, 10],
+            error: [30, 100, 30]
+        };
+        navigator.vibrate(patterns[type] || 10);
+    }
+}
+
+// Touch gesture support
+let touchStartX = 0;
+let touchStartY = 0;
+
+document.addEventListener('touchstart', function(e) {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+}, { passive: true });
+
+document.addEventListener('touchend', function(e) {
+    const touchEndX = e.changedTouches[0].clientX;
+    const touchEndY = e.changedTouches[0].clientY;
+    
+    const deltaX = touchEndX - touchStartX;
+    const deltaY = touchEndY - touchStartY;
+    
+    // Swipe left/right to switch views (if horizontal swipe is dominant)
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 50) {
+        const views = ['timeline', 'calendar', 'tickets'];
+        const currentIndex = views.indexOf(currentView);
+        
+        if (deltaX < 0 && currentIndex < views.length - 1) {
+            // Swipe left - next view
+            switchView(views[currentIndex + 1]);
+        } else if (deltaX > 0 && currentIndex > 0) {
+            // Swipe right - previous view
+            switchView(views[currentIndex - 1]);
+        }
+    }
+}, { passive: true });
+
+// Export functions for testing
+window.MinderApp = {
+    items,
+    createConfetti,
+    showCheckmarkCelebration,
+    showStreakCounter,
+    showAchievement,
+    hapticFeedback
+};
