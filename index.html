@@ -12,6 +12,7 @@
     <link rel="icon" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/butterfly.css">
 </head>
 <body>
     <!-- Loading Screen - 心灵梦境 -->
@@ -37,11 +38,54 @@
         
         <!-- 核心内容 -->
         <div class="loading-content">
-            <!-- Logo -->
-            <div class="minder-logo">
-                <div class="logo-aura"></div>
-                <div class="logo-inner">
-                    <div class="logo-icon">🦋</div>
+            <!-- Logo - 动态蝴蝶 -->
+            <div class="butterfly-container">
+                <!-- 小蝴蝶装饰 -->
+                <div class="mini-butterfly">🦋</div>
+                <div class="mini-butterfly">🦋</div>
+                <div class="mini-butterfly">🦋</div>
+                
+                <!-- 主蝴蝶 -->
+                <div class="css-butterfly">
+                    <!-- 左翅膀 -->
+                    <div class="butterfly-wing left">
+                        <div class="wing-upper">
+                            <div class="wing-pattern"></div>
+                            <div class="wing-pattern"></div>
+                        </div>
+                        <div class="wing-lower"></div>
+                    </div>
+                    
+                    <!-- 身体 -->
+                    <div class="butterfly-body">
+                        <div class="butterfly-head">
+                            <div class="butterfly-antenna left"></div>
+                            <div class="butterfly-antenna right"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- 右翅膀 -->
+                    <div class="butterfly-wing right">
+                        <div class="wing-upper">
+                            <div class="wing-pattern"></div>
+                            <div class="wing-pattern"></div>
+                        </div>
+                        <div class="wing-lower"></div>
+                    </div>
+                </div>
+                
+                <!-- 草丛 -->
+                <div class="grass-container">
+                    <div class="grass-blade"></div>
+                    <div class="grass-blade"></div>
+                    <div class="grass-blade"></div>
+                    <div class="grass-blade"></div>
+                    <div class="grass-blade"></div>
+                    <div class="grass-blade"></div>
+                    <div class="grass-blade"></div>
+                    <div class="flower">🌸</div>
+                    <div class="flower">🌼</div>
+                    <div class="flower">🌺</div>
                 </div>
             </div>
             
@@ -80,7 +124,7 @@
         <header class="header">
             <div class="header-content">
                 <div class="header-brand">
-                    <div class="header-icon">🦋</div>
+                    <div class="header-icon" style="animation: butterflyGlow 2s ease-in-out infinite;">🦋</div>
                     <div class="header-title">念念</div>
                 </div>
                 <div class="header-actions">

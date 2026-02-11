@@ -1237,6 +1237,65 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
+// ============ 蝴蝶魔法粒子效果 ============
+
+// 在蝴蝶周围生成魔法粒子
+function createButterflyMagic() {
+    const butterfly = document.querySelector('.butterfly-container');
+    if (!butterfly) return;
+    
+    setInterval(() => {
+        if (Math.random() > 0.7) { // 30% 概率生成
+            const particle = document.createElement('div');
+            particle.className = 'magic-particle';
+            
+            const size = Math.random() * 6 + 2;
+            const colors = ['#E0C3FC', '#8EC5FC', '#FFD1FF', '#A8EDEA', '#FED6E3'];
+            const color = colors[Math.floor(Math.random() * colors.length)];
+            
+            // 随机位置（围绕蝴蝶）
+            const angle = Math.random() * Math.PI * 2;
+            const distance = Math.random() * 60 + 40;
+            const startX = Math.cos(angle) * distance;
+            const startY = Math.sin(angle) * distance;
+            
+            particle.style.cssText = `
+                position: absolute;
+                width: ${size}px;
+                height: ${size}px;
+                background: ${color};
+                border-radius: 50%;
+                left: 50%;
+                top: 50%;
+                margin-left: ${startX}px;
+                margin-top: ${startY}px;
+                box-shadow: 0 0 10px ${color};
+                pointer-events: none;
+                z-index: 5;
+            `;
+            
+            // 设置CSS变量用于动画
+            const endX = (Math.random() - 0.5) * 100;
+            const endY = -Math.random() * 80 - 20;
+            particle.style.setProperty('--tx', endX + 'px');
+            particle.style.setProperty('--ty', endY + 'px');
+            
+            butterfly.appendChild(particle);
+            
+            // 触发动画
+            requestAnimationFrame(() => {
+                particle.style.animation = 'particleFloat 3s ease-out forwards';
+            });
+            
+            // 清理
+            setTimeout(() => particle.remove(), 3000);
+        }
+    }, 200);
+}
+
+// 页面加载后启动蝴蝶魔法
+setTimeout(createButterflyMagic, 1000);
+
 // ============ 心灵感动互动效果 ============
 
 // 1. 触摸涟漪效果 - 心灵波动
