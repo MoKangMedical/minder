@@ -2,10 +2,12 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="theme-color" content="#FF6B35">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#FFFFFF">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
     <title>念念 - 你的第二记忆</title>
-    <meta name="description" content="AI帮你珍藏每一个念想，让每个念想都不被辜负">
+    <meta name="description" content="AI帮你整理记忆，自动识别票务、取件码，生成待办和日程">
     <link rel="manifest" href="manifest.json">
     <link rel="icon" href="assets/icon-192.png">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
@@ -14,150 +16,267 @@
 <body>
     <!-- Loading Screen -->
     <div id="loadingScreen" class="loading-screen">
-        <div class="loading-content">
-            <div class="heart-icon">🍐</div>
-            <h1>念念</h1>
-            <p>你的第二记忆</p>
-        </div>
+        <div class="loading-logo">🎯</div>
+        <div class="loading-text">念念</div>
+        <div class="loading-subtitle">你的第二记忆</div>
     </div>
 
     <!-- Main App -->
     <div id="app" class="app hidden">
         <!-- Header -->
         <header class="header">
-            <div class="greeting">
-                <h1 id="greetingText">早安 ☀️</h1>
-                <p id="subtitleText">雪梨会一直陪着你的</p>
+            <div class="header-content">
+                <div class="header-title">念念</div>
+                <div class="header-actions">
+                    <button class="header-btn" onclick="toggleSearch()">🔍</button>
+                    <button class="header-btn" onclick="showStats()">📊</button>
+                </div>
             </div>
-            <button class="btn-stats" onclick="showStats()">📊</button>
         </header>
 
-        <!-- Stats Cards -->
-        <section class="stats-section">
-            <div class="stat-card">
-                <span class="stat-number" id="activeCount">0</span>
-                <span class="stat-label">待办念想</span>
+        <!-- Search Bar (Hidden by default) -->
+        <div id="searchContainer" class="search-container hidden">
+            <div class="search-bar">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" class="search-input" placeholder="搜索念想..." oninput="searchReminders(this.value)">
             </div>
-            <div class="stat-card">
-                <span class="stat-number" id="completedCount">0</span>
-                <span class="stat-label">已完成</span>
-            </div>
-        </section>
-
-        <!-- Filter -->
-        <div class="filter-section">
-            <button class="filter-btn active" data-filter="all">全部</button>
-            <button class="filter-btn" data-filter="active">待办</button>
-            <button class="filter-btn" data-filter="completed">已完成</button>
         </div>
 
-        <!-- Reminders List -->
-        <main class="reminders-container" id="remindersList">
-            <!-- Dynamic content -->
-        </main>
-
-        <!-- Empty State -->
-        <div id="emptyState" class="empty-state hidden">
-            <div class="empty-icon">📝</div>
-            <p>还没有念想</p>
-            <p class="empty-hint">点击下方按钮，说出你的第一个念想</p>
+        <!-- View Tabs -->
+        <div class="view-tabs">
+            <button class="view-tab active" data-view="timeline" onclick="switchView('timeline')">时间线</button>
+            <button class="view-tab" data-view="calendar" onclick="switchView('calendar')">日历</button>
+            <button class="view-tab" data-view="tickets" onclick="switchView('tickets')">票务</button>
         </div>
 
-        <!-- Record Button -->
-        <button class="fab-record" id="recordBtn" onclick="startRecording()">
-            <span class="mic-icon">🎤</span>
-        </button>
+        <!-- Timeline View -->
+        <div id="timelineView" class="view-container">
+            <div class="input-methods">
+                <button class="input-method-btn" onclick="showTextModal()">
+                    <div class="input-method-icon text">📝</div>
+                    <span class="input-method-label">文本</span>
+                </button>
+                <button class="input-method-btn" onclick="showVoiceModal()">
+                    <div class="input-method-icon voice">🎤</div>
+                    <span class="input-method-label">语音</span>
+                </button>
+                <button class="input-method-btn" onclick="showImageModal()">
+                    <div class="input-method-icon photo">📷</div>
+                    <span class="input-method-label">图片</span>
+                </button>
+            </div>
+
+            <div id="timelineContainer" class="timeline-container">
+                <!-- Dynamic content -->
+            </div>
+
+            <div id="emptyState" class="empty-state hidden">
+                <div class="empty-icon">📝</div>
+                <div class="empty-title">还没有念想</div>
+                <div class="empty-subtitle">点击右下角添加你的第一个念想</div>
+            </div>
+        </div>
+
+        <!-- Calendar View -->
+        <div id="calendarView" class="view-container hidden">
+            <div class="calendar-container">
+                <div class="calendar-header">
+                    <div id="calendarMonth" class="calendar-month">2026年2月</div>
+                    <div class="calendar-nav">
+                        <button class="calendar-nav-btn" onclick="prevMonth()">‹</button>
+                        <button class="calendar-nav-btn" onclick="nextMonth()">›</button>
+                    </div>
+                </div>
+                <div class="calendar-grid" id="calendarGrid">
+                    <!-- Dynamic calendar -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Tickets View -->
+        <div id="ticketsView" class="view-container hidden">
+            <div class="timeline-container" id="ticketsContainer">
+                <!-- Dynamic tickets -->
+            </div>
+            <div id="emptyTickets" class="empty-state">
+                <div class="empty-icon">🎫</div>
+                <div class="empty-title">还没有票务</div>
+                <div class="empty-subtitle">上传机票、火车票、电影票自动识别</div>
+            </div>
+        </div>
+
+        <!-- FAB -->
+        <div class="fab-container">
+            <div id="fabMenu" class="fab-menu">
+                <div class="fab-item" onclick="showTextModal()">
+                    <span class="fab-item-label">文本</span>
+                    <button class="fab-item-btn">📝</button>
+                </div>
+                <div class="fab-item" onclick="showVoiceModal()">
+                    <span class="fab-item-label">语音</span>
+                    <button class="fab-item-btn">🎤</button>
+                </div>
+                <div class="fab-item" onclick="showImageModal()">
+                    <span class="fab-item-label">图片</span>
+                    <button class="fab-item-btn">📷</button>
+                </div>
+            </div>
+            <button id="fab" class="fab" onclick="toggleFab()">+</button>
+        </div>
     </div>
 
-    <!-- Recording Modal -->
-    <div id="recordModal" class="modal hidden">
-        <div class="modal-content record-modal">
-            <button class="btn-close" onclick="closeRecordModal()">✕</button>
-            <p class="record-hint" id="recordHint">说出你的念想，我在听 👂</p>
-            
-            <!-- Waveform -->
-            <div class="waveform" id="waveform">
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
-                <div class="bar"></div>
+    <!-- Text Input Modal -->
+    <div id="textModal" class="modal" onclick="closeModal(event, 'textModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">输入文本</span>
+                <button class="modal-close" onclick="hideModal('textModal')">✕</button>
             </div>
+            <div class="modal-body">
+                <textarea id="textInput" class="text-input-area" placeholder="粘贴或输入任何内容：待办事项、会议时间、票务信息、取件码...&#10;&#10;AI会自动识别时间和关键信息"></textarea>
+                <button class="paste-btn" onclick="pasteFromClipboard()">
+                    <span>📋</span>
+                    从剪贴板粘贴
+                </button>
+                <div style="margin-top: 20px;">
+                    <button class="btn btn-primary" onclick="parseText()">智能解析</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-            <!-- Result Card -->
-            <div id="resultCard" class="result-card hidden">
-                <h3>解析结果</h3>
-                <div class="result-content">
-                    <p class="result-title" id="resultTitle">--</p>
-                    <p class="result-time" id="resultTime">--</p>
-                    <span class="result-category" id="resultCategory">--</span>
+    <!-- Voice Modal -->
+    <div id="voiceModal" class="modal" onclick="closeModal(event, 'voiceModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">语音输入</span>
+                <button class="modal-close" onclick="hideModal('voiceModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="voice-recorder">
+                    <div class="voice-waveform" id="voiceWaveform">
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                        <div class="bar"></div>
+                    </div>
+                    <button id="voiceBtn" class="voice-btn" onclick="toggleRecording()">🎤</button>
+                    <p class="voice-hint" id="voiceHint">点击开始录音</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal" onclick="closeModal(event, 'imageModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">识别图片</span>
+                <button class="modal-close" onclick="hideModal('imageModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <img id="imagePreview" class="image-preview hidden">
+                <div id="imageUploadArea" class="image-upload-area" onclick="selectImage()">
+                    <div class="image-upload-icon">📷</div>
+                    <div class="image-upload-text">点击上传图片<br>支持机票、火车票、电影票、取件码</div>
+                </div>
+                <input type="file" id="imageInput" accept="image/*" class="hidden" onchange="handleImageSelect(event)">
+                <div style="margin-top: 20px;">
+                    <button id="parseImageBtn" class="btn btn-primary hidden" onclick="parseImage()">识别图片</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Result Modal -->
+    <div id="resultModal" class="modal" onclick="closeModal(event, 'resultModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">解析结果</span>
+                <button class="modal-close" onclick="hideModal('resultModal')">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="result-container">
+                    <div class="result-header">
+                        <div class="result-icon" id="resultIcon">🤖</div>
+                        <span class="result-title">AI识别结果</span>
+                    </div>
+                    <div class="result-content" id="resultContent">
+                        <!-- Dynamic result -->
+                    </div>
                 </div>
                 <div class="result-actions">
-                    <button class="btn-secondary" onclick="cancelRecording()">取消</button>
-                    <button class="btn-primary" onclick="saveReminder()">保存念想</button>
+                    <button class="btn btn-secondary" onclick="hideModal('resultModal')">取消</button>
+                    <button class="btn btn-primary" onclick="saveResult()">保存</button>
                 </div>
             </div>
-
-            <!-- Record Button Large -->
-            <button class="btn-record-large" id="recordBtnLarge" 
-                    onmousedown="startRecordingVoice()" 
-                    onmouseup="stopRecordingVoice()"
-                    ontouchstart="startRecordingVoice()"
-                    ontouchend="stopRecordingVoice()">
-                <span>按住说话</span>
-            </button>
         </div>
     </div>
 
-    <!-- Card Modal -->
-    <div id="cardModal" class="modal hidden">
-        <div class="modal-content card-modal">
-            <button class="btn-close" onclick="closeCardModal()">✕</button>
-            <div class="completion-card">
-                <div class="card-icon">✨</div>
-                <h2>又完成了一个念想</h2>
-                <p class="card-title" id="cardTitle">--</p>
-                <p class="card-date" id="cardDate">--</p>
-                <p class="card-encouragement" id="cardEncouragement">真棒！继续加油 ♥</p>
-                <div class="card-actions">
-                    <button class="btn-share" onclick="shareCard()">分享到朋友圈</button>
-                </div>
+    <!-- Ticket Detail Modal -->
+    <div id="ticketModal" class="modal" onclick="closeModal(event, 'ticketModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">票务详情</span>
+                <button class="modal-close" onclick="hideModal('ticketModal')">✕</button>
+            </div>
+            <div class="modal-body" id="ticketDetailContent">
+                <!-- Dynamic ticket detail -->
             </div>
         </div>
     </div>
 
     <!-- Stats Modal -->
-    <div id="statsModal" class="modal hidden">
-        <div class="modal-content stats-modal">
-            <button class="btn-close" onclick="closeStatsModal()">✕</button>
-            <h2>念想统计</h2>
-            <div class="stats-grid">
-                <div class="stat-item">
-                    <span class="stat-value" id="totalCount">0</span>
-                    <span class="stat-name">总念想</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value" id="completionRate">0%</span>
-                    <span class="stat-name">完成率</span>
-                </div>
-                <div class="stat-item">
-                    <span class="stat-value" id="todayCount">0</span>
-                    <span class="stat-name">今日完成</span>
-                </div>
+    <div id="statsModal" class="modal" onclick="closeModal(event, 'statsModal')">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <span class="modal-title">统计</span>
+                <button class="modal-close" onclick="hideModal('statsModal')">✕</button>
             </div>
-            <div class="category-stats" id="categoryStats">
-                <!-- Dynamic content -->
+            <div class="modal-body">
+                <div class="stats-container">
+                    <div class="stats-card">
+                        <div class="stats-header">
+                            <span class="stats-title">今日概览</span>
+                        </div>
+                        <div class="stats-grid">
+                            <div class="stats-item">
+                                <div class="stats-value" id="todayCount">0</div>
+                                <div class="stats-label">今日事项</div>
+                            </div>
+                            <div class="stats-item">
+                                <div class="stats-value" id="completedToday">0</div>
+                                <div class="stats-label">已完成</div>
+                            </div>
+                            <div class="stats-item">
+                                <div class="stats-value" id="pendingCount">0</div>
+                                <div class="stats-label">待处理</div>
+                            </div>
+                            <div class="stats-item">
+                                <div class="stats-value" id="ticketCount">0</div>
+                                <div class="stats-label">票务</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="stats-card">
+                        <div class="stats-header">
+                            <span class="stats-title">类型分布</span>
+                        </div>
+                        <div id="typeStats">
+                            <!-- Dynamic type stats -->
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
     <!-- Toast -->
-    <div id="toast" class="toast hidden"></div>
+    <div id="toast" class="toast"></div>
 
     <script src="js/app.js"></script>
 </body>

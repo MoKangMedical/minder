@@ -1,18 +1,21 @@
-// 念念 (Minder) - Web App
+// 念念 (Minder) - Yore Style
 // 你的第二记忆
 
 const CONFIG = {
-    KIMI_API_KEY: 'sk-JRT2t7Pnqq7Cm2wh6nw1G2QcK9OxNBAFujR3zhD2GzqkbFbz',
+    KIMI_API_KEY: 'sk-JLr7p2LHV9sSnmE0eNZA3XCCHH0Ij76JZBp9rDbbcfJEIYZQ',
     KIMI_API_URL: 'https://api.moonshot.cn/v1/chat/completions',
     APP_NAME: '念念',
-    APP_VERSION: '1.0.0'
+    APP_VERSION: '2.0.0'
 };
 
 // State
-let reminders = JSON.parse(localStorage.getItem('minder_reminders') || '[]');
+let items = JSON.parse(localStorage.getItem('minder_items') || '[]');
 let currentParsedResult = null;
 let isRecording = false;
 let recognition = null;
+let currentView = 'timeline';
+let currentMonth = new Date();
+let selectedImage = null;
 
 // Initialize
 window.onload = function() {
@@ -22,114 +25,331 @@ window.onload = function() {
             document.getElementById('loadingScreen').classList.add('hidden');
             document.getElementById('app').classList.remove('hidden');
             initApp();
-        }, 500);
+        }, 400);
     }, 1500);
 };
 
 function initApp() {
-    updateGreeting();
-    renderReminders();
-    updateStats();
-    setupEventListeners();
+    renderTimeline();
     initSpeechRecognition();
+    setupCalendar();
 }
 
-// Greeting
-function updateGreeting() {
-    const hour = new Date().getHours();
-    let greeting = '早安 ☀️';
-    let subtitle = '雪梨会一直陪着你的';
+// View Management
+function switchView(view) {
+    currentView = view;
     
-    if (hour < 6 || hour >= 23) {
-        greeting = '夜深了 💤';
-        subtitle = '早点休息，明天见';
-    } else if (hour < 12) {
-        greeting = '早安 ☀️';
-        subtitle = '今天也是美好的一天';
-    } else if (hour < 18) {
-        greeting = '下午好 💪';
-        subtitle = '继续加油';
-    } else {
-        greeting = '晚上好 🌙';
-        subtitle = '记得休息';
+    // Update tabs
+    document.querySelectorAll('.view-tab').forEach(tab => {
+        tab.classList.remove('active');
+        if (tab.dataset.view === view) {
+            tab.classList.add('active');
+        }
+    });
+    
+    // Show/hide containers
+    document.getElementById('timelineView').classList.add('hidden');
+    document.getElementById('calendarView').classList.add('hidden');
+    document.getElementById('ticketsView').classList.add('hidden');
+    
+    document.getElementById(view + 'View').classList.remove('hidden');
+    
+    // Refresh content
+    if (view === 'timeline') {
+        renderTimeline();
+    } else if (view === 'calendar') {
+        renderCalendar();
+    } else if (view === 'tickets') {
+        renderTickets();
     }
-    
-    document.getElementById('greetingText').textContent = greeting;
-    document.getElementById('subtitleText').textContent = subtitle;
 }
 
-// Render Reminders
-function renderReminders(filter = 'all') {
-    const container = document.getElementById('remindersList');
+// Timeline
+function renderTimeline() {
+    const container = document.getElementById('timelineContainer');
     const emptyState = document.getElementById('emptyState');
     
-    let filteredReminders = reminders;
-    if (filter === 'active') {
-        filteredReminders = reminders.filter(r => !r.completed);
-    } else if (filter === 'completed') {
-        filteredReminders = reminders.filter(r => r.completed);
-    }
-    
     // Sort by time
-    filteredReminders.sort((a, b) => a.time - b.time);
+    const sortedItems = [...items].sort((a, b) => a.time - b.time);
     
-    if (filteredReminders.length === 0) {
+    if (sortedItems.length === 0) {
         container.innerHTML = '';
         emptyState.classList.remove('hidden');
         return;
     }
     
     emptyState.classList.add('hidden');
-    container.innerHTML = filteredReminders.map(reminder => `
-        <div class="reminder-item ${reminder.completed ? 'completed' : ''}" data-id="${reminder.id}">
-            <div class="reminder-content">
-                <div class="reminder-title">${escapeHtml(reminder.title)}</div>
-                <div class="reminder-time">${formatTime(reminder.time)}</div>
-                <span class="reminder-category category-${reminder.category}">${reminder.category}</span>
-            </div>
-            <div class="reminder-actions">
-                ${!reminder.completed ? `
-                    <button class="btn-complete" onclick="completeReminder(${reminder.id})" title="完成">✓</button>
-                ` : ''}
-                <button class="btn-delete" onclick="deleteReminder(${reminder.id})" title="删除">🗑</button>
-            </div>
-        </div>
+    
+    // Group by date
+    const grouped = groupByDate(sortedItems);
+    
+    container.innerHTML = Object.entries(grouped).map(([date, dateItems]) => `
+        <div class="timeline-date">${date}</div>
+        ${dateItems.map(item => renderItemCard(item)).join('')}
     `).join('');
 }
 
-// Update Stats
-function updateStats() {
-    const active = reminders.filter(r => !r.completed).length;
-    const completed = reminders.filter(r => r.completed).length;
+function groupByDate(items) {
+    const grouped = {};
     
-    document.getElementById('activeCount').textContent = active;
-    document.getElementById('completedCount').textContent = completed;
-    document.getElementById('totalCount').textContent = reminders.length;
-    document.getElementById('completionRate').textContent = 
-        reminders.length > 0 ? Math.round((completed / reminders.length) * 100) + '%' : '0%';
+    items.forEach(item => {
+        const date = formatDateGroup(item.time);
+        if (!grouped[date]) {
+            grouped[date] = [];
+        }
+        grouped[date].push(item);
+    });
     
-    // Today's completed
-    const today = new Date().toDateString();
-    const todayCompleted = reminders.filter(r => {
-        if (!r.completed || !r.completedAt) return false;
-        return new Date(r.completedAt).toDateString() === today;
-    }).length;
-    document.getElementById('todayCount').textContent = todayCompleted;
+    return grouped;
 }
 
-// Event Listeners
-function setupEventListeners() {
-    // Filter buttons
-    document.querySelectorAll('.filter-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            renderReminders(btn.dataset.filter);
-        });
+function formatDateGroup(timestamp) {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const tomorrow = new Date(now);
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    
+    if (date.toDateString() === now.toDateString()) {
+        return '今天';
+    } else if (date.toDateString() === tomorrow.toDateString()) {
+        return '明天';
+    } else {
+        return date.toLocaleDateString('zh-CN', { month: 'long', day: 'numeric', weekday: 'short' });
+    }
+}
+
+function renderItemCard(item) {
+    const icons = {
+        todo: '✓',
+        event: '📅',
+        ticket: '🎫',
+        pickup: '📦',
+        note: '📝'
+    };
+    
+    const isTicket = item.type === 'ticket';
+    const isPickup = item.type === 'pickup';
+    
+    if (isTicket) {
+        return renderTicketCard(item);
+    }
+    
+    if (isPickup) {
+        return renderPickupCard(item);
+    }
+    
+    return `
+        <div class="timeline-item ${item.completed ? 'completed' : ''}" data-id="${item.id}">
+            <div class="card">
+                <div class="card-icon ${item.type}">${icons[item.type] || '📝'}</div>
+                <div class="card-content">
+                    <div class="card-title">${escapeHtml(item.title)}</div>
+                    <div class="card-subtitle">${escapeHtml(item.description || '')}</div>
+                    <div class="card-time">${formatTime(item.time)}</div>
+                    ${item.category ? `<span class="card-badge">${item.category}</span>` : ''}
+                </div>
+                <div class="card-actions">
+                    ${!item.completed ? `
+                        <button class="card-btn complete" onclick="completeItem(${item.id})" title="完成">✓</button>
+                    ` : ''}
+                    <button class="card-btn delete" onclick="deleteItem(${item.id})" title="删除">🗑</button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function renderTicketCard(item) {
+    const ticketColors = {
+        flight: 'linear-gradient(135deg, #5856D6 0%, #AF52DE 100%)',
+        train: 'linear-gradient(135deg, #FF9500 0%, #FF6B35 100%)',
+        movie: 'linear-gradient(135deg, #AF52DE 0%, #FF2D55 100%)',
+        concert: 'linear-gradient(135deg, #FF2D55 0%, #FF6B35 100%)'
+    };
+    
+    const ticketNames = {
+        flight: '✈️ 航班',
+        train: '🚄 火车',
+        movie: '🎬 电影',
+        concert: '🎵 演唱会'
+    };
+    
+    return `
+        <div class="timeline-item" data-id="${item.id}" onclick="showTicketDetail(${item.id})">
+            <div class="ticket-card" style="background: ${ticketColors[item.ticketType] || ticketColors.flight}">
+                <div class="ticket-type">${ticketNames[item.ticketType] || '🎫 票务'}</div>
+                <div class="ticket-title">${escapeHtml(item.title)}</div>
+                <div class="ticket-info">${escapeHtml(item.description || '')}</div>
+                <div class="ticket-barcode">
+                    <div class="ticket-code">${item.ticketCode || '----'}</div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function renderPickupCard(item) {
+    return `
+        <div class="timeline-item ${item.completed ? 'completed' : ''}" data-id="${item.id}">
+            <div class="pickup-card">
+                <div class="pickup-header">
+                    <div class="pickup-icon">📦</div>
+                    <span class="pickup-title">${escapeHtml(item.title)}</span>
+                </div>
+                <div class="pickup-code-display">${item.pickupCode || '----'}</div>
+                <div class="pickup-location">${escapeHtml(item.location || '取件地点未指定')}</div>
+                <div style="margin-top: 12px; display: flex; gap: 8px;">
+                    ${!item.completed ? `
+                        <button class="btn btn-primary" style="flex: 1; padding: 10px;" onclick="event.stopPropagation(); completeItem(${item.id})">标记完成</button>
+                    ` : ''}
+                    <button class="btn btn-secondary" style="flex: 1; padding: 10px;" onclick="event.stopPropagation(); deleteItem(${item.id})">删除</button>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// Tickets View
+function renderTickets() {
+    const container = document.getElementById('ticketsContainer');
+    const emptyState = document.getElementById('emptyTickets');
+    
+    const tickets = items.filter(item => item.type === 'ticket' || item.type === 'pickup');
+    
+    if (tickets.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        return;
+    }
+    
+    emptyState.classList.add('hidden');
+    
+    container.innerHTML = tickets
+        .sort((a, b) => a.time - b.time)
+        .map(item => renderItemCard(item))
+        .join('');
+}
+
+// Calendar
+function setupCalendar() {
+    renderCalendar();
+}
+
+function renderCalendar() {
+    const year = currentMonth.getFullYear();
+    const month = currentMonth.getMonth();
+    
+    document.getElementById('calendarMonth').textContent = 
+        `${year}年${month + 1}月`;
+    
+    const firstDay = new Date(year, month, 1);
+    const lastDay = new Date(year, month + 1, 0);
+    const startPadding = firstDay.getDay();
+    
+    const days = [];
+    
+    // Day headers
+    const headers = ['日', '一', '二', '三', '四', '五', '六'];
+    headers.forEach(h => {
+        days.push(`<div class="calendar-day-header">${h}</div>`);
+    });
+    
+    // Padding
+    for (let i = 0; i < startPadding; i++) {
+        days.push('<div></div>');
+    }
+    
+    // Days
+    const today = new Date();
+    for (let d = 1; d <= lastDay.getDate(); d++) {
+        const date = new Date(year, month, d);
+        const isToday = date.toDateString() === today.toDateString();
+        const hasEvent = hasEventOnDate(date);
+        
+        days.push(`
+            <div class="calendar-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}">
+                <span class="calendar-day-number">${d}</span>
+            </div>
+        `);
+    }
+    
+    document.getElementById('calendarGrid').innerHTML = days.join('');
+}
+
+function hasEventOnDate(date) {
+    return items.some(item => {
+        const itemDate = new Date(item.time);
+        return itemDate.toDateString() === date.toDateString();
     });
 }
 
-// Speech Recognition
+function prevMonth() {
+    currentMonth.setMonth(currentMonth.getMonth() - 1);
+    renderCalendar();
+}
+
+function nextMonth() {
+    currentMonth.setMonth(currentMonth.getMonth() + 1);
+    renderCalendar();
+}
+
+// FAB
+function toggleFab() {
+    const fab = document.getElementById('fab');
+    const menu = document.getElementById('fabMenu');
+    
+    fab.classList.toggle('expanded');
+    menu.classList.toggle('show');
+}
+
+// Modals
+function showTextModal() {
+    document.getElementById('textModal').classList.add('show');
+    toggleFab();
+}
+
+function showVoiceModal() {
+    document.getElementById('voiceModal').classList.add('show');
+    toggleFab();
+}
+
+function showImageModal() {
+    document.getElementById('imageModal').classList.add('show');
+    toggleFab();
+}
+
+function hideModal(modalId) {
+    document.getElementById(modalId).classList.remove('show');
+}
+
+function closeModal(event, modalId) {
+    if (event.target === event.currentTarget) {
+        hideModal(modalId);
+    }
+}
+
+// Text Input
+async function pasteFromClipboard() {
+    try {
+        const text = await navigator.clipboard.readText();
+        document.getElementById('textInput').value = text;
+    } catch (err) {
+        showToast('无法访问剪贴板');
+    }
+}
+
+async function parseText() {
+    const text = document.getElementById('textInput').value.trim();
+    if (!text) {
+        showToast('请输入内容');
+        return;
+    }
+    
+    hideModal('textModal');
+    await parseWithAI(text, 'text');
+}
+
+// Voice
 function initSpeechRecognition() {
     if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
         const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -140,76 +360,98 @@ function initSpeechRecognition() {
         
         recognition.onstart = () => {
             isRecording = true;
-            document.getElementById('recordHint').textContent = '正在聆听...';
-            document.querySelector('.waveform').style.display = 'flex';
+            document.getElementById('voiceHint').textContent = '正在聆听...';
+            document.getElementById('voiceBtn').classList.add('recording');
         };
         
         recognition.onend = () => {
             isRecording = false;
-            document.querySelector('.waveform').style.display = 'none';
+            document.getElementById('voiceHint').textContent = '点击开始录音';
+            document.getElementById('voiceBtn').classList.remove('recording');
         };
         
         recognition.onresult = (event) => {
             const text = event.results[0][0].transcript;
-            parseVoiceText(text);
+            hideModal('voiceModal');
+            parseWithAI(text, 'voice');
         };
         
-        recognition.onerror = (event) => {
+        recognition.onerror = () => {
             showToast('语音识别失败，请重试');
             isRecording = false;
         };
     }
 }
 
-// Recording Functions
-function startRecording() {
-    document.getElementById('recordModal').classList.remove('hidden');
-    document.getElementById('resultCard').classList.add('hidden');
-    document.getElementById('recordBtnLarge').classList.remove('hidden');
-    currentParsedResult = null;
-}
-
-function closeRecordModal() {
-    if (isRecording && recognition) {
-        recognition.stop();
-    }
-    document.getElementById('recordModal').classList.add('hidden');
-}
-
-function startRecordingVoice() {
+function toggleRecording() {
     if (!recognition) {
-        // Fallback: show text input
-        const text = prompt('请输入你的念想：');
-        if (text) {
-            parseVoiceText(text);
-        }
+        showToast('您的浏览器不支持语音识别');
         return;
     }
     
-    try {
-        recognition.start();
-    } catch (e) {
-        showToast('请允许麦克风权限');
-    }
-}
-
-function stopRecordingVoice() {
-    if (recognition && isRecording) {
+    if (isRecording) {
         recognition.stop();
+    } else {
+        recognition.start();
     }
 }
 
-function cancelRecording() {
-    document.getElementById('resultCard').classList.add('hidden');
-    document.getElementById('recordBtnLarge').classList.remove('hidden');
-    currentParsedResult = null;
+// Image
+function selectImage() {
+    document.getElementById('imageInput').click();
 }
 
-// AI Parsing with Kimi
-async function parseVoiceText(text) {
-    document.getElementById('recordBtnLarge').classList.add('hidden');
-    document.getElementById('recordHint').textContent = '我在理解你的念想...';
-    document.querySelector('.waveform').style.display = 'flex';
+function handleImageSelect(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    
+    selectedImage = file;
+    
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const preview = document.getElementById('imagePreview');
+        preview.src = e.target.result;
+        preview.classList.remove('hidden');
+        document.getElementById('imageUploadArea').classList.add('hidden');
+        document.getElementById('parseImageBtn').classList.remove('hidden');
+    };
+    reader.readAsDataURL(file);
+}
+
+async function parseImage() {
+    if (!selectedImage) return;
+    
+    showToast('图片识别功能需要后端支持，这里模拟识别结果');
+    
+    // Simulate ticket detection
+    const mockResults = [
+        {
+            type: 'ticket',
+            ticketType: 'flight',
+            title: '北京 → 上海',
+            description: '2026年2月15日 09:30 起飞',
+            ticketCode: 'CA1234',
+            time: new Date('2026-02-15T09:30:00').getTime()
+        },
+        {
+            type: 'pickup',
+            title: '快递取件',
+            pickupCode: '8-3-9527',
+            location: '菜鸟驿站',
+            time: Date.now() + 24 * 60 * 60 * 1000
+        }
+    ];
+    
+    const result = mockResults[Math.floor(Math.random() * mockResults.length)];
+    currentParsedResult = { ...result, id: Date.now() };
+    
+    hideModal('imageModal');
+    showResultModal(currentParsedResult);
+}
+
+// AI Parsing
+async function parseWithAI(text, inputType) {
+    showToast('AI正在解析...');
     
     try {
         const response = await fetch(CONFIG.KIMI_API_URL, {
@@ -223,15 +465,30 @@ async function parseVoiceText(text) {
                 messages: [
                     {
                         role: 'system',
-                        content: `你是一个智能念想解析助手。请从用户的输入中提取以下信息并以JSON格式返回：
-                        {
-                            "title": "念想的简短标题（不超过10个字）",
-                            "time": "具体的提醒时间（Unix时间戳毫秒）",
-                            "category": "分类：亲情、工作、学习、生活、健康中的一个",
-                            "priority": 优先级数字（0=低，1=中，2=高）
-                        }
-                        当前时间：${new Date().toISOString()}
-                        只返回JSON，不要包含其他说明文字。`
+                        content: `你是一个智能信息提取助手。从用户的输入中提取关键信息并以JSON格式返回。
+                        
+支持的类型：
+1. todo - 待办事项
+2. event - 日程事件
+3. ticket - 票务（机票flight、火车票train、电影票movie、演唱会concert）
+4. pickup - 取件码
+5. note - 笔记
+
+返回格式：
+{
+    "type": "todo|event|ticket|pickup|note",
+    "title": "简短标题",
+    "description": "详细描述",
+    "time": "Unix时间戳毫秒",
+    "category": "分类标签",
+    "ticketType": "flight/train/movie/concert（仅票务）",
+    "ticketCode": "票号（仅票务）",
+    "pickupCode": "取件码（仅取件）",
+    "location": "地点"
+}
+
+当前时间：${new Date().toISOString()}
+只返回JSON，不要包含其他说明文字。`
                     },
                     {
                         role: 'user',
@@ -245,201 +502,309 @@ async function parseVoiceText(text) {
         const data = await response.json();
         const content = data.choices[0].message.content;
         
-        // Parse JSON from response
         let parsed;
         try {
-            // Try to extract JSON if wrapped in code blocks
             const jsonMatch = content.match(/```json\n?([\s\S]*?)\n?```/) || 
                               content.match(/```\n?([\s\S]*?)\n?```/) ||
                               [null, content];
             parsed = JSON.parse(jsonMatch[1] || content);
         } catch (e) {
-            // Fallback parsing
             parsed = fallbackParse(text);
         }
         
         currentParsedResult = {
-            title: parsed.title || text.substring(0, 20),
-            time: parsed.time || getDefaultTime(),
-            category: parsed.category || '生活',
-            priority: parsed.priority || 1,
+            ...parsed,
+            id: Date.now(),
             originalText: text,
-            id: Date.now()
+            inputType: inputType
         };
         
-        showResultCard(currentParsedResult);
+        showResultModal(currentParsedResult);
         
     } catch (error) {
         console.error('Parse error:', error);
-        // Fallback
         currentParsedResult = fallbackParse(text);
-        showResultCard(currentParsedResult);
+        showResultModal(currentParsedResult);
     }
 }
 
 function fallbackParse(text) {
-    // Simple rule-based parsing
-    let time = getDefaultTime();
-    let category = '生活';
-    
-    // Time parsing
-    if (text.includes('明天')) {
-        time = Date.now() + 24 * 60 * 60 * 1000;
-    } else if (text.includes('今天')) {
-        time = Date.now();
+    // Detect ticket patterns
+    if (text.match(/航班|机票|flight/i)) {
+        return {
+            type: 'ticket',
+            ticketType: 'flight',
+            title: '航班信息',
+            description: text.substring(0, 50),
+            time: Date.now() + 24 * 60 * 60 * 1000,
+            ticketCode: text.match(/[A-Z]{2}\d{3,4}/)?.[0] || ''
+        };
     }
     
-    // Category detection
-    if (text.includes('妈妈') || text.includes('爸爸') || text.includes('家人')) {
-        category = '亲情';
-    } else if (text.includes('工作') || text.includes('会议') || text.includes('项目')) {
-        category = '工作';
-    } else if (text.includes('学习') || text.includes('看书') || text.includes('课程')) {
-        category = '学习';
-    } else if (text.includes('健身') || text.includes('运动') || text.includes('喝水')) {
-        category = '健康';
+    if (text.match(/火车|高铁|动车|train/i)) {
+        return {
+            type: 'ticket',
+            ticketType: 'train',
+            title: '火车票',
+            description: text.substring(0, 50),
+            time: Date.now() + 24 * 60 * 60 * 1000
+        };
     }
     
+    if (text.match(/电影|movie|cinema/i)) {
+        return {
+            type: 'ticket',
+            ticketType: 'movie',
+            title: '电影票',
+            description: text.substring(0, 50),
+            time: Date.now() + 24 * 60 * 60 * 1000
+        };
+    }
+    
+    // Detect pickup code
+    const pickupMatch = text.match(/(取件码|提取码|自提码)[：:]?\s*(\d+[-\s]?\d+[-\s]?\d+|\d{4,})/i) ||
+                       text.match(/(\d{4,}[-\s]?\d{0,4})\s*.*?取件/);
+    if (pickupMatch) {
+        return {
+            type: 'pickup',
+            title: '快递取件',
+            pickupCode: pickupMatch[2] || pickupMatch[1],
+            location: text.match(/(菜鸟驿站|快递柜|便利店|超市)/)?.[0] || '取件点',
+            time: Date.now() + 24 * 60 * 60 * 1000
+        };
+    }
+    
+    // Default todo
     return {
+        type: 'todo',
         title: text.substring(0, 20),
-        time: time,
-        category: category,
-        priority: 1,
-        originalText: text,
-        id: Date.now()
+        description: text,
+        time: Date.now() + 24 * 60 * 60 * 1000,
+        category: '生活'
     };
 }
 
-function getDefaultTime() {
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1);
-    tomorrow.setHours(9, 0, 0, 0);
-    return tomorrow.getTime();
-}
-
-function showResultCard(result) {
-    document.querySelector('.waveform').style.display = 'none';
-    document.getElementById('resultTitle').textContent = result.title;
-    document.getElementById('resultTime').textContent = formatTime(result.time);
-    document.getElementById('resultCategory').textContent = result.category;
-    document.getElementById('resultCategory').className = `result-category category-${result.category}`;
+function showResultModal(result) {
+    const typeNames = {
+        todo: '待办事项',
+        event: '日程事件',
+        ticket: '票务',
+        pickup: '取件码',
+        note: '笔记'
+    };
     
-    document.getElementById('resultCard').classList.remove('hidden');
+    const content = document.getElementById('resultContent');
+    content.innerHTML = `
+        <div class="result-item">
+            <span class="result-label">类型</span>
+            <span class="result-value">${typeNames[result.type] || result.type}</span>
+        </div>
+        <div class="result-item">
+            <span class="result-label">标题</span>
+            <span class="result-value">${escapeHtml(result.title)}</span>
+        </div>
+        ${result.description ? `
+        <div class="result-item">
+            <span class="result-label">描述</span>
+            <span class="result-value">${escapeHtml(result.description)}</span>
+        </div>
+        ` : ''}
+        <div class="result-item">
+            <span class="result-label">时间</span>
+            <span class="result-value">${formatTime(result.time)}</span>
+        </div>
+        ${result.ticketCode ? `
+        <div class="result-item">
+            <span class="result-label">票号</span>
+            <span class="result-value">${result.ticketCode}</span>
+        </div>
+        ` : ''}
+        ${result.pickupCode ? `
+        <div class="result-item">
+            <span class="result-label">取件码</span>
+            <span class="result-value" style="font-size: 18px; font-weight: 700;">${result.pickupCode}</span>
+        </div>
+        ` : ''}
+        ${result.location ? `
+        <div class="result-item">
+            <span class="result-label">地点</span>
+            <span class="result-value">${escapeHtml(result.location)}</span>
+        </div>
+        ` : ''}
+    `;
+    
+    document.getElementById('resultModal').classList.add('show');
 }
 
-function saveReminder() {
+function saveResult() {
     if (!currentParsedResult) return;
     
-    reminders.push({
+    items.push({
         ...currentParsedResult,
         completed: false,
         createdAt: Date.now()
     });
     
-    saveReminders();
-    renderReminders();
-    updateStats();
-    closeRecordModal();
-    showToast('✨ 我会帮你记住这个念想');
+    saveItems();
+    hideModal('resultModal');
+    showToast('已保存');
     
-    // Schedule notification if supported
-    if ('Notification' in window && Notification.permission === 'granted') {
-        scheduleNotification(currentParsedResult);
+    // Refresh current view
+    if (currentView === 'timeline') {
+        renderTimeline();
+    } else if (currentView === 'tickets') {
+        renderTickets();
+    }
+    
+    // Reset
+    document.getElementById('textInput').value = '';
+    currentParsedResult = null;
+}
+
+// Item Actions
+function completeItem(id) {
+    const item = items.find(i => i.id === id);
+    if (item) {
+        item.completed = true;
+        item.completedAt = Date.now();
+        saveItems();
+        renderTimeline();
+        showToast('已完成 ✓');
     }
 }
 
-// Complete Reminder
-function completeReminder(id) {
-    const reminder = reminders.find(r => r.id === id);
-    if (reminder) {
-        reminder.completed = true;
-        reminder.completedAt = Date.now();
-        saveReminders();
-        renderReminders();
-        updateStats();
-        showCard(reminder);
+function deleteItem(id) {
+    if (confirm('确定要删除吗？')) {
+        items = items.filter(i => i.id !== id);
+        saveItems();
+        
+        if (currentView === 'timeline') {
+            renderTimeline();
+        } else if (currentView === 'tickets') {
+            renderTickets();
+        }
+        
+        showToast('已删除');
     }
 }
 
-// Delete Reminder
-function deleteReminder(id) {
-    if (confirm('确定要删除这个念想吗？')) {
-        reminders = reminders.filter(r => r.id !== id);
-        saveReminders();
-        renderReminders();
-        updateStats();
-        showToast('念想已删除');
-    }
-}
-
-// Show Completion Card
-function showCard(reminder) {
-    document.getElementById('cardTitle').textContent = reminder.title;
-    document.getElementById('cardDate').textContent = 
-        '完成于 ' + new Date().toLocaleDateString('zh-CN');
-    document.getElementById('cardModal').classList.remove('hidden');
-}
-
-function closeCardModal() {
-    document.getElementById('cardModal').classList.add('hidden');
-}
-
-function shareCard() {
-    if (navigator.share) {
-        navigator.share({
-            title: '念念 - 你的第二记忆',
-            text: `用念念完成了一个念想，分享给你~`,
-            url: window.location.href
-        });
-    } else {
-        showToast('分享功能需要HTTPS环境');
-    }
-}
-
-// Stats Modal
-function showStats() {
-    document.getElementById('statsModal').classList.remove('hidden');
-    renderCategoryStats();
-}
-
-function closeStatsModal() {
-    document.getElementById('statsModal').classList.add('hidden');
-}
-
-function renderCategoryStats() {
-    const categories = ['亲情', '工作', '学习', '生活', '健康'];
-    const categoryColors = {
-        '亲情': '#FFB6C1',
-        '工作': '#4A90E2',
-        '学习': '#9B59B6',
-        '生活': '#FF6B35',
-        '健康': '#7ED321'
+function showTicketDetail(id) {
+    const item = items.find(i => i.id === id);
+    if (!item || item.type !== 'ticket') return;
+    
+    const ticketNames = {
+        flight: '✈️ 航班',
+        train: '🚄 火车',
+        movie: '🎬 电影',
+        concert: '🎵 演唱会'
     };
     
-    const stats = {};
-    categories.forEach(c => stats[c] = 0);
-    reminders.filter(r => r.completed).forEach(r => {
-        if (stats[r.category] !== undefined) {
-            stats[r.category]++;
-        }
-    });
-    
-    const max = Math.max(...Object.values(stats), 1);
-    
-    document.getElementById('categoryStats').innerHTML = categories.map(cat => `
-        <div class="category-item">
-            <span class="category-name">${cat}</span>
-            <div class="category-bar">
-                <div class="category-progress" style="width: ${(stats[cat] / max) * 100}%; background: ${categoryColors[cat]}"></div>
+    document.getElementById('ticketDetailContent').innerHTML = `
+        <div class="ticket-card" style="margin-bottom: 20px; background: linear-gradient(135deg, #5856D6 0%, #AF52DE 100%);">
+            <div class="ticket-type">${ticketNames[item.ticketType] || '🎫 票务'}</div>
+            <div class="ticket-title">${escapeHtml(item.title)}</div>
+            <div class="ticket-info">${escapeHtml(item.description || '')}</div>
+            <div class="ticket-barcode">
+                <div class="ticket-code">${item.ticketCode || '----'}</div>
             </div>
-            <span class="category-count">${stats[cat]}</span>
         </div>
+        <div class="result-content">
+            <div class="result-item">
+                <span class="result-label">时间</span>
+                <span class="result-value">${formatTime(item.time)}</span>
+            </div>
+            ${item.location ? `
+            <div class="result-item">
+                <span class="result-label">地点</span>
+                <span class="result-value">${escapeHtml(item.location)}</span>
+            </div>
+            ` : ''}
+        </div>
+        <div style="margin-top: 20px; display: flex; gap: 12px;">
+            <button class="btn btn-secondary" onclick="hideModal('ticketModal')">关闭</button>
+            <button class="btn btn-primary" onclick="deleteItem(${item.id}); hideModal('ticketModal');">删除</button>
+        </div>
+    `;
+    
+    document.getElementById('ticketModal').classList.add('show');
+}
+
+// Search
+function toggleSearch() {
+    const container = document.getElementById('searchContainer');
+    container.classList.toggle('hidden');
+    if (!container.classList.contains('hidden')) {
+        document.getElementById('searchInput').focus();
+    }
+}
+
+function searchReminders(query) {
+    if (!query) {
+        renderTimeline();
+        return;
+    }
+    
+    const filtered = items.filter(item => 
+        item.title.toLowerCase().includes(query.toLowerCase()) ||
+        (item.description && item.description.toLowerCase().includes(query.toLowerCase()))
+    );
+    
+    const container = document.getElementById('timelineContainer');
+    const emptyState = document.getElementById('emptyState');
+    
+    if (filtered.length === 0) {
+        container.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        emptyState.querySelector('.empty-title').textContent = '未找到结果';
+        return;
+    }
+    
+    emptyState.classList.add('hidden');
+    
+    const grouped = groupByDate(filtered);
+    container.innerHTML = Object.entries(grouped).map(([date, dateItems]) => `
+        <div class="timeline-date">${date}</div>
+        ${dateItems.map(item => renderItemCard(item)).join('')}
     `).join('');
 }
 
+// Stats
+function showStats() {
+    const today = new Date().toDateString();
+    const todayItems = items.filter(i => new Date(i.time).toDateString() === today);
+    
+    document.getElementById('todayCount').textContent = todayItems.length;
+    document.getElementById('completedToday').textContent = todayItems.filter(i => i.completed).length;
+    document.getElementById('pendingCount').textContent = items.filter(i => !i.completed).length;
+    document.getElementById('ticketCount').textContent = items.filter(i => i.type === 'ticket').length;
+    
+    // Type stats
+    const types = {};
+    items.forEach(i => {
+        types[i.type] = (types[i.type] || 0) + 1;
+    });
+    
+    const typeNames = {
+        todo: '待办',
+        event: '日程',
+        ticket: '票务',
+        pickup: '取件',
+        note: '笔记'
+    };
+    
+    document.getElementById('typeStats').innerHTML = Object.entries(types).map(([type, count]) => `
+        <div class="settings-item">
+            <span class="settings-label">${typeNames[type] || type}</span>
+            <span style="color: var(--text-secondary);">${count}</span>
+        </div>
+    `).join('');
+    
+    document.getElementById('statsModal').classList.add('show');
+}
+
 // Utilities
-function saveReminders() {
-    localStorage.setItem('minder_reminders', JSON.stringify(reminders));
+function saveItems() {
+    localStorage.setItem('minder_items', JSON.stringify(items));
 }
 
 function formatTime(timestamp) {
@@ -468,34 +833,20 @@ function escapeHtml(text) {
 function showToast(message) {
     const toast = document.getElementById('toast');
     toast.textContent = message;
-    toast.classList.remove('hidden');
+    toast.classList.add('show');
     setTimeout(() => {
-        toast.classList.add('hidden');
-    }, 3000);
+        toast.classList.remove('show');
+    }, 2500);
 }
 
-// Notification Support
-if ('Notification' in window && Notification.permission === 'default') {
-    Notification.requestPermission();
-}
-
-function scheduleNotification(reminder) {
-    const now = Date.now();
-    const delay = reminder.time - now;
-    
-    if (delay > 0 && delay < 86400000) { // Within 24 hours
-        setTimeout(() => {
-            new Notification('念念', {
-                body: `你的念想到时间了：${reminder.title}`,
-                icon: 'assets/icon-192.png'
-            });
-        }, delay);
-    }
-}
-
-// Service Worker for PWA
+// PWA
 if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('sw.js').catch(err => {
         console.log('SW registration failed');
     });
+}
+
+// Notifications
+if ('Notification' in window && Notification.permission === 'default') {
+    Notification.requestPermission();
 }
