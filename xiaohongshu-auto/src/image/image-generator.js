@@ -35,6 +35,7 @@ class ImageGenerator {
         html: html,
         quality: 100,
         puppeteerArgs: {
+          args: ['--no-sandbox', '--disable-setuid-sandbox'],
           defaultViewport: {
             width: this.width,
             height: this.height
