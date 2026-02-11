@@ -52,6 +52,133 @@ function initApp() {
     setupCalendar();
 }
 
+// Soul Moment - 心灵时刻
+let selectedMood = null;
+
+function showSoulMoment() {
+    document.getElementById('soulModal').classList.add('show');
+    toggleFab();
+    
+    // Reset mood selection
+    selectedMood = null;
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+        btn.style.borderColor = 'transparent';
+        btn.style.transform = 'scale(1)';
+    });
+}
+
+function selectMood(mood) {
+    selectedMood = mood;
+    
+    // Reset all buttons
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+        btn.style.borderColor = 'transparent';
+        btn.style.transform = 'scale(1)';
+    });
+    
+    // Highlight selected
+    const selectedBtn = document.querySelector(`[data-mood="${mood}"]`);
+    if (selectedBtn) {
+        selectedBtn.style.borderColor = '#E0C3FC';
+        selectedBtn.style.transform = 'scale(1.15)';
+        selectedBtn.style.boxShadow = '0 4px 20px rgba(224,195,252,0.4)';
+    }
+    
+    // Haptic feedback
+    hapticFeedback('light');
+}
+
+function saveSoulMoment() {
+    const text = document.getElementById('soulInput').value.trim();
+    
+    if (!text && !selectedMood) {
+        showToast('请选择心情或写下你的想法 💭');
+        return;
+    }
+    
+    const moodEmojis = {
+        peaceful: '😌',
+        happy: '😊',
+        excited: '✨',
+        grateful: '🙏',
+        thoughtful: '🤔'
+    };
+    
+    const moodNames = {
+        peaceful: '平静',
+        happy: '愉悦',
+        excited: '兴奋',
+        grateful: '感恩',
+        thoughtful: '深思'
+    };
+    
+    const soulItem = {
+        id: Date.now(),
+        type: 'note',
+        title: selectedMood ? `${moodEmojis[selectedMood]} ${moodNames[selectedMood]}时刻` : '💭 心灵随想',
+        description: text || '此刻的心情，无需言语',
+        time: Date.now(),
+        category: '心灵',
+        completed: false,
+        createdAt: Date.now(),
+        isSoulMoment: true,
+        mood: selectedMood
+    };
+    
+    items.push(soulItem);
+    saveItems();
+    hideModal('soulModal');
+    
+    // Show special soul celebration
+    createSoulConfetti();
+    showSoulToast('珍藏成功', '这份感动，已被永恒铭记 ✨');
+    
+    // Refresh view
+    if (currentView === 'timeline') {
+        renderTimeline();
+        setTimeout(() => {
+            const newItem = document.querySelector(`[data-id="${soulItem.id}"]`);
+            if (newItem) {
+                newItem.classList.add('new');
+                newItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }, 100);
+    }
+    
+    // Reset
+    document.getElementById('soulInput').value = '';
+    selectedMood = null;
+    document.querySelectorAll('.mood-btn').forEach(btn => {
+        btn.style.borderColor = 'transparent';
+        btn.style.transform = 'scale(1)';
+        btn.style.boxShadow = '';
+    });
+}
+
+// Special soul confetti - more ethereal
+function createSoulConfetti() {
+    const colors = ['#E0C3FC', '#8EC5FC', '#FFD1FF', '#A8EDEA', '#FED6E3', '#D299C2'];
+    const container = document.createElement('div');
+    container.className = 'confetti-container';
+    document.body.appendChild(container);
+    
+    for (let i = 0; i < 30; i++) {
+        const confetti = document.createElement('div');
+        confetti.className = 'confetti';
+        confetti.style.left = Math.random() * 100 + '%';
+        confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+        confetti.style.width = (Math.random() * 8 + 4) + 'px';
+        confetti.style.height = (Math.random() * 8 + 4) + 'px';
+        confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+        confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+        confetti.style.animationDelay = Math.random() * 0.5 + 's';
+        confetti.style.opacity = '0.8';
+        container.appendChild(confetti);
+    }
+    
+    setTimeout(() => container.remove(), 3500);
+}
+
 // View Management
 function switchView(view) {
     currentView = view;
@@ -1107,6 +1234,189 @@ document.addEventListener('keydown', function(e) {
         if (views[viewIndex]) {
             switchView(views[viewIndex]);
         }
+    }
+});
+
+// ============ 心灵感动互动效果 ============
+
+// 1. 触摸涟漪效果 - 心灵波动
+document.addEventListener('click', function(e) {
+    createSoulRipple(e.clientX, e.clientY);
+});
+
+function createSoulRipple(x, y) {
+    const ripple = document.createElement('div');
+    ripple.className = 'soul-ripple';
+    ripple.style.cssText = `
+        position: fixed;
+        left: ${x}px;
+        top: ${y}px;
+        width: 20px;
+        height: 20px;
+        background: radial-gradient(circle, rgba(224,195,252,0.6) 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9999;
+        transform: translate(-50%, -50%);
+        animation: soulRippleExpand 1s ease-out forwards;
+    `;
+    document.body.appendChild(ripple);
+    
+    setTimeout(() => ripple.remove(), 1000);
+}
+
+// 添加涟漪动画到CSS
+const soulRippleStyle = document.createElement('style');
+soulRippleStyle.textContent = `
+    @keyframes soulRippleExpand {
+        0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+        100% { transform: translate(-50%, -50%) scale(8); opacity: 0; }
+    }
+`;
+document.head.appendChild(soulRippleStyle);
+
+// 2. 鼠标跟随光点 - 心灵之光
+document.addEventListener('mousemove', function(e) {
+    if (Math.random() > 0.9) { // 随机生成，不要太频繁
+        createSoulLight(e.clientX, e.clientY);
+    }
+});
+
+function createSoulLight(x, y) {
+    const light = document.createElement('div');
+    light.style.cssText = `
+        position: fixed;
+        left: ${x}px;
+        top: ${y}px;
+        width: 6px;
+        height: 6px;
+        background: radial-gradient(circle, #E0C3FC 0%, transparent 70%);
+        border-radius: 50%;
+        pointer-events: none;
+        z-index: 9998;
+        animation: soulLightFloat 1.5s ease-out forwards;
+    `;
+    document.body.appendChild(light);
+    
+    setTimeout(() => light.remove(), 1500);
+}
+
+const soulLightStyle = document.createElement('style');
+soulLightStyle.textContent = `
+    @keyframes soulLightFloat {
+        0% { transform: translate(0, 0) scale(1); opacity: 0.8; }
+        100% { transform: translate(${Math.random() * 40 - 20}px, -50px) scale(0); opacity: 0; }
+    }
+`;
+document.head.appendChild(soulLightStyle);
+
+// 3. 每日心灵问候
+function showSoulGreeting() {
+    const hour = new Date().getHours();
+    let greeting = '';
+    let subtext = '';
+    
+    if (hour < 6) {
+        greeting = '夜深人静，万物安眠';
+        subtext = '愿你的梦境如极光般绚烂';
+    } else if (hour < 9) {
+        greeting = '晨光熹微，新的一天';
+        subtext = '愿你今天的每一步都充满意义';
+    } else if (hour < 12) {
+        greeting = '上午好，追梦人';
+        subtext = '每一个念头，都是未来的种子';
+    } else if (hour < 14) {
+        greeting = '午安，小憩片刻';
+        subtext = '在忙碌中，别忘了善待自己';
+    } else if (hour < 17) {
+        greeting = '下午好，继续前行';
+        subtext = '你的每一份努力，时光都看得见';
+    } else if (hour < 20) {
+        greeting = '黄昏时分，思绪万千';
+        subtext = '捕捉此刻的想法，让美好有迹可循';
+    } else if (hour < 22) {
+        greeting = '夜幕降临，心灵归处';
+        subtext = '回顾今天，感恩每一刻的遇见';
+    } else {
+        greeting = '夜色温柔，星辰相伴';
+        subtext = '愿你的明天，比今天更加精彩';
+    }
+    
+    // 显示问候
+    showSoulToast(greeting, subtext);
+}
+
+// 心灵感动Toast
+function showSoulToast(title, subtitle) {
+    const toast = document.createElement('div');
+    toast.style.cssText = `
+        position: fixed;
+        top: 100px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: rgba(255,255,255,0.95);
+        backdrop-filter: blur(20px);
+        padding: 20px 32px;
+        border-radius: 24px;
+        text-align: center;
+        z-index: 10000;
+        box-shadow: 0 8px 32px rgba(224,195,252,0.3);
+        border: 1px solid rgba(255,255,255,0.8);
+        animation: soulToastIn 0.6s ease forwards;
+    `;
+    toast.innerHTML = `
+        <div style="font-size: 16px; font-weight: 500; color: #4A4A6A; margin-bottom: 6px;">${title}</div>
+        <div style="font-size: 13px; color: #9B8AA5;">${subtitle}</div>
+    `;
+    document.body.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.animation = 'soulToastOut 0.4s ease forwards';
+        setTimeout(() => toast.remove(), 400);
+    }, 4000);
+}
+
+const soulToastStyle = document.createElement('style');
+soulToastStyle.textContent = `
+    @keyframes soulToastIn {
+        0% { transform: translateX(-50%) translateY(-30px); opacity: 0; }
+        100% { transform: translateX(-50%) translateY(0); opacity: 1; }
+    }
+    @keyframes soulToastOut {
+        0% { transform: translateX(-50%) translateY(0); opacity: 1; }
+        100% { transform: translateX(-50%) translateY(-20px); opacity: 0; }
+    }
+`;
+document.head.appendChild(soulToastStyle);
+
+// 页面加载后显示问候
+setTimeout(showSoulGreeting, 2000);
+
+// 4. 滚动视差效果 - 梦境流动
+let lastScrollY = 0;
+document.addEventListener('scroll', function() {
+    const scrollY = window.scrollY;
+    const diff = scrollY - lastScrollY;
+    
+    // 为背景添加微妙的视差
+    document.body.style.backgroundPosition = `0 ${scrollY * 0.1}px`;
+    
+    lastScrollY = scrollY;
+}, { passive: true });
+
+// 5. 卡片悬停心灵感应
+document.addEventListener('mouseover', function(e) {
+    const card = e.target.closest('.timeline-item');
+    if (card && !card.classList.contains('soul-active')) {
+        card.classList.add('soul-active');
+        
+        // 添加微妙的光晕
+        card.style.boxShadow = '0 12px 40px rgba(224,195,252,0.25)';
+        
+        setTimeout(() => {
+            card.classList.remove('soul-active');
+            card.style.boxShadow = '';
+        }, 300);
     }
 });
 

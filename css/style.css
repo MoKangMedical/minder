@@ -849,6 +849,28 @@ body {
     border-radius: 20px;
 }
 
+/* Mood selector buttons */
+.mood-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.mood-btn.selected {
+    border-color: #E0C3FC;
+    transform: scale(1.15);
+    box-shadow: 0 4px 20px rgba(224,195,252,0.4);
+}
+
+/* Soul moment special styling */
+.timeline-item[data-type="note"] .card-icon {
+    animation: soulGlow 3s ease-in-out infinite;
+}
+
+@keyframes soulGlow {
+    0%, 100% { box-shadow: 0 4px 15px rgba(224,195,252,0.3); }
+    50% { box-shadow: 0 4px 25px rgba(224,195,252,0.6); }
+}
+
 /* 响应式 */
 @media (max-width: 380px) {
     .brand-cn {
