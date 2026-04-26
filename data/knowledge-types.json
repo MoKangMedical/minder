@@ -1,0 +1,86 @@
+{
+  "version": "1.0",
+  "description": "Minder 知识类型定义",
+  "types": [
+    {
+      "id": "article",
+      "name": "文章",
+      "icon": "📄",
+      "description": "从外部来源采集的完整文章内容",
+      "fields": ["title", "content", "author", "source_url", "published_at", "word_count"],
+      "default_tags": [],
+      "auto_summary": true,
+      "supports_crawl": true
+    },
+    {
+      "id": "note",
+      "name": "笔记",
+      "icon": "📝",
+      "description": "个人记录的学习笔记、会议记录、工作日志等",
+      "fields": ["title", "content", "tags", "linked_items"],
+      "default_tags": ["笔记"],
+      "auto_summary": true,
+      "supports_crawl": false
+    },
+    {
+      "id": "idea",
+      "name": "想法",
+      "icon": "💡",
+      "description": "灵光一现的想法、创意、假设",
+      "fields": ["content", "context", "tags", "maturity"],
+      "default_tags": ["想法"],
+      "auto_summary": false,
+      "supports_crawl": false,
+      "maturity_levels": ["萌芽", "发展", "成熟", "已验证"]
+    },
+    {
+      "id": "question",
+      "name": "问题",
+      "icon": "❓",
+      "description": "待解决的问题、疑问、好奇心驱动的探索",
+      "fields": ["content", "context", "status", "answer", "tags"],
+      "default_tags": ["问题"],
+      "auto_summary": false,
+      "supports_crawl": false,
+      "status_options": ["待研究", "研究中", "已解答", "已关闭"]
+    },
+    {
+      "id": "inspiration",
+      "name": "灵感",
+      "icon": "✨",
+      "description": "来自阅读、对话、观察的灵感火花",
+      "fields": ["content", "trigger", "tags", "potential_use"],
+      "default_tags": ["灵感"],
+      "auto_summary": false,
+      "supports_crawl": false
+    },
+    {
+      "id": "project",
+      "name": "项目",
+      "icon": "🎯",
+      "description": "正在进行或计划中的项目相关知识",
+      "fields": ["title", "description", "status", "milestones", "related_items", "tags"],
+      "default_tags": ["项目"],
+      "auto_summary": true,
+      "supports_crawl": false,
+      "status_options": ["规划中", "进行中", "已完成", "已暂停"]
+    }
+  ],
+  "relation_types": [
+    { "id": "related", "name": "相关", "symmetric": true },
+    { "id": "references", "name": "引用", "symmetric": false },
+    { "id": "contradicts", "name": "矛盾", "symmetric": true },
+    { "id": "extends", "name": "扩展", "symmetric": false },
+    { "id": "part_of", "name": "属于", "symmetric": false },
+    { "id": "inspired_by", "name": "灵感来源", "symmetric": false },
+    { "id": "leads_to", "name": "导致", "symmetric": false },
+    { "id": "similar_to", "name": "相似", "symmetric": true }
+  ],
+  "tag_categories": [
+    { "id": "topic", "name": "主题", "color": "#4A90D9" },
+    { "id": "source", "name": "来源", "color": "#7B68EE" },
+    { "id": "status", "name": "状态", "color": "#50C878" },
+    { "id": "priority", "name": "优先级", "color": "#FF6B6B" },
+    { "id": "custom", "name": "自定义", "color": "#FFD700" }
+  ]
+}

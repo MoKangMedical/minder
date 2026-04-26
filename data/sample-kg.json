@@ -1,0 +1,188 @@
+{
+  "version": "1.0",
+  "description": "示例知识图谱 — AI与机器学习领域",
+  "metadata": {
+    "created_at": "2024-01-15",
+    "node_count": 10,
+    "edge_count": 12,
+    "domain": "AI与机器学习"
+  },
+  "nodes": [
+    {
+      "id": "k1",
+      "label": "Transformer架构",
+      "type": "concept",
+      "description": "2017年Google提出的基于自注意力机制的神经网络架构，彻底改变了NLP领域",
+      "tags": ["深度学习", "NLP", "架构"],
+      "created_at": "2024-01-10",
+      "source": "Attention Is All You Need"
+    },
+    {
+      "id": "k2",
+      "label": "注意力机制",
+      "type": "concept",
+      "description": "让模型能够关注输入中最相关部分的技术，是Transformer的核心组件",
+      "tags": ["深度学习", "NLP"],
+      "created_at": "2024-01-08",
+      "source": "Neural Machine Translation by Jointly Learning to Align and Translate"
+    },
+    {
+      "id": "k3",
+      "label": "GPT系列",
+      "type": "concept",
+      "description": "OpenAI的生成式预训练模型系列，从GPT-1到GPT-4，推动了大语言模型的发展",
+      "tags": ["LLM", "OpenAI", "生成式AI"],
+      "created_at": "2024-01-12",
+      "source": "Improving Language Understanding by Generative Pre-Training"
+    },
+    {
+      "id": "k4",
+      "label": "知识图谱",
+      "type": "concept",
+      "description": "用图结构表示实体及其关系的知识表示方法，广泛应用于搜索、推荐、问答",
+      "tags": ["知识表示", "图数据库", "语义网"],
+      "created_at": "2024-01-14",
+      "source": "知识图谱综述"
+    },
+    {
+      "id": "k5",
+      "label": "RAG技术",
+      "type": "concept",
+      "description": "检索增强生成，将外部知识检索与LLM生成相结合，减少幻觉",
+      "tags": ["LLM", "检索", "RAG"],
+      "created_at": "2024-01-13",
+      "source": "Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks"
+    },
+    {
+      "id": "k6",
+      "label": "向量数据库",
+      "type": "tool",
+      "description": "专门存储和检索高维向量的数据库，是语义搜索的基础设施",
+      "tags": ["数据库", "向量搜索", "基础设施"],
+      "created_at": "2024-01-11",
+      "source": "Milvus/Chroma/Pinecone"
+    },
+    {
+      "id": "k7",
+      "label": "医疗影像AI",
+      "type": "application",
+      "description": "AI在医学影像诊断中的应用，包括X光、CT、MRI的自动分析",
+      "tags": ["医疗AI", "计算机视觉", "应用"],
+      "created_at": "2024-01-09",
+      "source": "医疗AI应用综述"
+    },
+    {
+      "id": "k8",
+      "label": "间隔重复算法",
+      "type": "concept",
+      "description": "基于遗忘曲线的复习调度算法，用于长期记忆优化",
+      "tags": ["学习科学", "算法", "记忆"],
+      "created_at": "2024-01-15",
+      "source": "SM-2算法"
+    },
+    {
+      "id": "k9",
+      "label": "个人知识管理",
+      "type": "concept",
+      "description": "个人对知识的获取、组织、存储、分享和应用的系统化方法",
+      "tags": ["知识管理", "方法论", "效率"],
+      "created_at": "2024-01-07",
+      "source": "Building a Second Brain"
+    },
+    {
+      "id": "k10",
+      "label": "Minder项目",
+      "type": "project",
+      "description": "AI驱动的个人知识管理平台，整合采集、整理、图谱、搜索等功能",
+      "tags": ["项目", "知识管理", "AI"],
+      "created_at": "2024-01-15",
+      "source": "自建项目"
+    }
+  ],
+  "edges": [
+    {
+      "source": "k1",
+      "target": "k2",
+      "relation": "包含",
+      "weight": 0.95,
+      "description": "Transformer的核心组件是多头注意力机制"
+    },
+    {
+      "source": "k3",
+      "target": "k1",
+      "relation": "基于",
+      "weight": 0.9,
+      "description": "GPT系列基于Transformer的decoder部分构建"
+    },
+    {
+      "source": "k5",
+      "target": "k3",
+      "relation": "扩展",
+      "weight": 0.85,
+      "description": "RAG为GPT等LLM增加了外部知识检索能力"
+    },
+    {
+      "source": "k5",
+      "target": "k6",
+      "relation": "依赖",
+      "weight": 0.8,
+      "description": "RAG实现依赖向量数据库进行语义检索"
+    },
+    {
+      "source": "k5",
+      "target": "k4",
+      "relation": "相关",
+      "weight": 0.75,
+      "description": "RAG和知识图谱都是增强LLM知识能力的方法"
+    },
+    {
+      "source": "k7",
+      "target": "k1",
+      "relation": "应用",
+      "weight": 0.7,
+      "description": "医疗影像AI越来越多地使用Transformer架构"
+    },
+    {
+      "source": "k10",
+      "target": "k9",
+      "relation": "实现",
+      "weight": 0.95,
+      "description": "Minder是个人知识管理理念的技术实现"
+    },
+    {
+      "source": "k10",
+      "target": "k5",
+      "relation": "集成",
+      "weight": 0.9,
+      "description": "Minder使用RAG技术实现智能检索"
+    },
+    {
+      "source": "k10",
+      "target": "k4",
+      "relation": "集成",
+      "weight": 0.85,
+      "description": "Minder集成了知识图谱功能"
+    },
+    {
+      "source": "k10",
+      "target": "k6",
+      "relation": "使用",
+      "weight": 0.8,
+      "description": "Minder使用Chroma作为向量存储"
+    },
+    {
+      "source": "k10",
+      "target": "k8",
+      "relation": "集成",
+      "weight": 0.75,
+      "description": "Minder的回顾提醒基于间隔重复算法"
+    },
+    {
+      "source": "k9",
+      "target": "k8",
+      "relation": "包含",
+      "weight": 0.7,
+      "description": "间隔重复是个人知识管理的重要方法之一"
+    }
+  ]
+}
