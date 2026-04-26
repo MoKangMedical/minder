@@ -1,0 +1,194 @@
+{
+  "integrations": [
+    {
+      "id": "obsidian",
+      "name": "Obsidian",
+      "type": "local_app",
+      "status": "supported",
+      "description": "与Obsidian知识库双向同步",
+      "features": ["双向同步", "标签映射", "双链支持", "附件同步"],
+      "config": {
+        "vault_path": {"type": "string", "required": true},
+        "sync_direction": {"type": "select", "options": ["bidirectional", "push", "pull"], "default": "bidirectional"},
+        "sync_interval": {"type": "select", "options": ["realtime", "5min", "15min", "manual"], "default": "5min"},
+        "conflict_resolution": {"type": "select", "options": ["local", "remote", "ask"], "default": "ask"}
+      }
+    },
+    {
+      "id": "zotero",
+      "name": "Zotero",
+      "type": "local_app",
+      "status": "supported",
+      "description": "与Zotero文献库集成",
+      "features": ["文献导入", "标注同步", "引用管理", "PDF附件"],
+      "api": {
+        "type": "REST",
+        "base_url": "http://localhost:23119/api",
+        "auth": "api_key"
+      },
+      "config": {
+        "api_key": {"type": "password", "required": true},
+        "library_id": {"type": "string", "required": true},
+        "sync_annotations": {"type": "boolean", "default": true},
+        "auto_import": {"type": "boolean", "default": false}
+      }
+    },
+    {
+      "id": "notion",
+      "name": "Notion",
+      "type": "cloud",
+      "status": "supported",
+      "description": "与Notion数据库同步",
+      "features": ["数据库同步", "页面导入", "属性映射", "实时协作"],
+      "api": {
+        "type": "REST",
+        "base_url": "https://api.notion.com/v1",
+        "auth": "oauth2",
+        "version": "2022-06-28"
+      },
+      "config": {
+        "access_token": {"type": "password", "required": true},
+        "database_id": {"type": "string", "required": true},
+        "property_mapping": {"type": "object", "default": {}}
+      }
+    },
+    {
+      "id": "readwise",
+      "name": "Readwise",
+      "type": "cloud",
+      "status": "supported",
+      "description": "从Readwise导入高亮和笔记",
+      "features": ["高亮导入", "笔记同步", "每日回顾"],
+      "api": {
+        "type": "REST",
+        "base_url": "https://readwise.io/api/v2",
+        "auth": "token"
+      },
+      "config": {
+        "access_token": {"type": "password", "required": true},
+        "sync_since": {"type": "date", "default": "2020-01-01"},
+        "auto_sync": {"type": "boolean", "default": true}
+      }
+    },
+    {
+      "id": "pocket",
+      "name": "Pocket",
+      "type": "cloud",
+      "status": "planned",
+      "description": "从Pocket导入保存的文章",
+      "features": ["文章导入", "标签同步", "阅读状态"],
+      "api": {
+        "type": "REST",
+        "base_url": "https://getpocket.com/v3",
+        "auth": "oauth2"
+      },
+      "config": {
+        "consumer_key": {"type": "string", "required": true},
+        "access_token": {"type": "password", "required": true}
+      }
+    },
+    {
+      "id": "anki",
+      "name": "Anki",
+      "type": "local_app",
+      "status": "supported",
+      "description": "导出闪卡到Anki进行间隔重复",
+      "features": ["闪卡导出", "标签映射", "模板自定义", "自动更新"],
+      "api": {
+        "type": "REST",
+        "base_url": "http://localhost:8765",
+        "auth": "none",
+        "plugin": "AnkiConnect"
+      },
+      "config": {
+        "deck_name": {"type": "string", "default": "Minder"},
+        "model_name": {"type": "string", "default": "Basic"},
+        "tag_prefix": {"type": "string", "default": "minder::"},
+        "auto_export": {"type": "boolean", "default": false}
+      }
+    },
+    {
+      "id": "openai",
+      "name": "OpenAI API",
+      "type": "cloud",
+      "status": "supported",
+      "description": "AI辅助功能：摘要、问答、标签建议",
+      "features": ["智能摘要", "问答系统", "自动标签", "内容分析", "翻译"],
+      "api": {
+        "type": "REST",
+        "base_url": "https://api.openai.com/v1",
+        "auth": "api_key"
+      },
+      "config": {
+        "api_key": {"type": "password", "required": true},
+        "model": {"type": "select", "options": ["gpt-4", "gpt-4-turbo", "gpt-3.5-turbo"], "default": "gpt-4-turbo"},
+        "max_tokens": {"type": "range", "min": 100, "max": 4000, "default": 1000},
+        "temperature": {"type": "range", "min": 0, "max": 1, "step": 0.1, "default": 0.3}
+      }
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "type": "cloud",
+      "status": "supported",
+      "description": "代码和仓库集成",
+      "features": ["代码导入", "Issue链接", "README解析"],
+      "api": {
+        "type": "REST",
+        "base_url": "https://api.github.com",
+        "auth": "token"
+      },
+      "config": {
+        "personal_token": {"type": "password", "required": true},
+        "default_org": {"type": "string", "default": ""}
+      }
+    },
+    {
+      "id": "webdav",
+      "name": "WebDAV",
+      "type": "cloud",
+      "status": "supported",
+      "description": "通过WebDAV协议同步数据",
+      "features": ["文件同步", "跨设备", "自托管"],
+      "api": {
+        "type": "WebDAV",
+        "auth": "basic"
+      },
+      "config": {
+        "server_url": {"type": "string", "required": true},
+        "username": {"type": "string", "required": true},
+        "password": {"type": "password", "required": true},
+        "remote_path": {"type": "string", "default": "/minder"}
+      }
+    },
+    {
+      "id": "calibre",
+      "name": "Calibre",
+      "type": "local_app",
+      "status": "planned",
+      "description": "电子书管理集成",
+      "features": ["电子书导入", "元数据同步", "格式转换"],
+      "api": {
+        "type": "REST",
+        "base_url": "http://localhost:8080",
+        "auth": "basic"
+      },
+      "config": {
+        "server_url": {"type": "string", "required": true},
+        "username": {"type": "string", "default": ""},
+        "password": {"type": "password", "default": ""}
+      }
+    }
+  ],
+  "webhooks": {
+    "enabled": true,
+    "events": ["annotation.created", "annotation.updated", "item.imported", "export.completed"],
+    "max_retries": 3,
+    "timeout_ms": 5000
+  },
+  "oauth_providers": [
+    {"id": "google", "name": "Google", "scopes": ["profile", "email"]},
+    {"id": "github", "name": "GitHub", "scopes": ["user", "repo"]},
+    {"id": "notion", "name": "Notion", "scopes": ["read", "write"]}
+  ]
+}

@@ -1,0 +1,87 @@
+{
+  "user_preferences_schema": {
+    "version": "1.0",
+    "description": "Minder用户偏好设置配置",
+    "categories": [
+      {
+        "id": "general",
+        "name": "通用设置",
+        "preferences": [
+          {"id": "language", "name": "界面语言", "type": "select", "options": ["zh-CN", "en-US", "ja-JP", "ko-KR"], "default": "zh-CN"},
+          {"id": "theme", "name": "主题", "type": "select", "options": ["light", "dark", "auto", "sepia"], "default": "auto"},
+          {"id": "font_family", "name": "字体", "type": "select", "options": ["system", "serif", "sans-serif", "monospace"], "default": "system"},
+          {"id": "font_size", "name": "字号", "type": "range", "min": 12, "max": 24, "default": 16},
+          {"id": "line_height", "name": "行高", "type": "range", "min": 1.2, "max": 2.0, "step": 0.1, "default": 1.6},
+          {"id": "auto_save", "name": "自动保存", "type": "boolean", "default": true},
+          {"id": "auto_save_interval", "name": "自动保存间隔(秒)", "type": "range", "min": 10, "max": 300, "default": 30}
+        ]
+      },
+      {
+        "id": "reading",
+        "name": "阅读设置",
+        "preferences": [
+          {"id": "reading_mode", "name": "阅读模式", "type": "select", "options": ["page", "scroll", "continuous"], "default": "scroll"},
+          {"id": "page_width", "name": "页面宽度", "type": "select", "options": ["narrow", "medium", "wide", "full"], "default": "medium"},
+          {"id": "highlight_opacity", "name": "高亮透明度", "type": "range", "min": 0.1, "max": 0.8, "step": 0.1, "default": 0.3},
+          {"id": "show_annotations", "name": "默认显示标注", "type": "boolean", "default": true},
+          {"id": "annotation_sidebar", "name": "标注侧栏位置", "type": "select", "options": ["left", "right", "hidden"], "default": "right"},
+          {"id": "progress_tracking", "name": "阅读进度追踪", "type": "boolean", "default": true},
+          {"id": "reading_goal_daily", "name": "每日阅读目标(分钟)", "type": "range", "min": 0, "max": 480, "step": 15, "default": 30}
+        ]
+      },
+      {
+        "id": "annotation",
+        "name": "标注设置",
+        "preferences": [
+          {"id": "default_highlight_color", "name": "默认高亮颜色", "type": "color", "default": "#FFEB3B"},
+          {"id": "annotation_tool", "name": "默认标注工具", "type": "select", "options": ["highlight", "underline", "note", "bookmark"], "default": "highlight"},
+          {"id": "quick_annotation", "name": "快速标注模式", "type": "boolean", "default": true},
+          {"id": "auto_tag", "name": "自动标签建议", "type": "boolean", "default": true},
+          {"id": "annotation_notification", "name": "标注通知", "type": "boolean", "default": false},
+          {"id": "annotation_sync", "name": "标注实时同步", "type": "boolean", "default": true}
+        ]
+      },
+      {
+        "id": "organization",
+        "name": "组织设置",
+        "preferences": [
+          {"id": "default_view", "name": "默认视图", "type": "select", "options": ["list", "grid", "timeline", "graph"], "default": "list"},
+          {"id": "sort_by", "name": "默认排序", "type": "select", "options": ["date_modified", "date_created", "title", "relevance", "custom"], "default": "date_modified"},
+          {"id": "sort_order", "name": "排序方向", "type": "select", "options": ["asc", "desc"], "default": "desc"},
+          {"id": "items_per_page", "name": "每页显示数量", "type": "select", "options": [10, 20, 50, 100], "default": 20},
+          {"id": "show_preview", "name": "显示预览", "type": "boolean", "default": true},
+          {"id": "preview_length", "name": "预览长度", "type": "select", "options": ["short", "medium", "long"], "default": "medium"}
+        ]
+      },
+      {
+        "id": "notification",
+        "name": "通知设置",
+        "preferences": [
+          {"id": "enable_notifications", "name": "启用通知", "type": "boolean", "default": true},
+          {"id": "review_reminder", "name": "复习提醒", "type": "boolean", "default": true},
+          {"id": "review_interval", "name": "复习间隔", "type": "select", "options": ["1d", "3d", "7d", "14d", "30d"], "default": "7d"},
+          {"id": "notification_sound", "name": "通知声音", "type": "boolean", "default": true},
+          {"id": "quiet_hours_start", "name": "免打扰开始", "type": "time", "default": "22:00"},
+          {"id": "quiet_hours_end", "name": "免打扰结束", "type": "time", "default": "08:00"}
+        ]
+      },
+      {
+        "id": "privacy",
+        "name": "隐私设置",
+        "preferences": [
+          {"id": "analytics", "name": "使用分析", "type": "boolean", "default": false},
+          {"id": "cloud_sync", "name": "云端同步", "type": "boolean", "default": true},
+          {"id": "encrypt_data", "name": "本地数据加密", "type": "boolean", "default": false},
+          {"id": "share_annotations", "name": "默认分享标注", "type": "boolean", "default": false},
+          {"id": "data_retention", "name": "数据保留期限", "type": "select", "options": ["forever", "1y", "2y", "5y"], "default": "forever"}
+        ]
+      }
+    ]
+  },
+  "preset_themes": [
+    {"id": "light", "name": "明亮", "bg": "#FFFFFF", "text": "#333333", "accent": "#1976D2"},
+    {"id": "dark", "name": "暗黑", "bg": "#1E1E1E", "text": "#E0E0E0", "accent": "#64B5F6"},
+    {"id": "sepia", "name": "护眼", "bg": "#F5F0E1", "text": "#5B4636", "accent": "#8B7355"},
+    {"id": "green", "name": "绿色", "bg": "#E8F5E9", "text": "#2E7D32", "accent": "#4CAF50"}
+  ]
+}

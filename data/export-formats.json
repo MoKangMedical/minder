@@ -1,0 +1,188 @@
+{
+  "formats": [
+    {
+      "id": "json",
+      "name": "JSON",
+      "extension": ".json",
+      "mime_type": "application/json",
+      "description": "结构化数据格式，适合程序处理和数据交换",
+      "supports": {
+        "annotations": true,
+        "highlights": true,
+        "notes": true,
+        "tags": true,
+        "metadata": true,
+        "images": false,
+        "formatting": false
+      },
+      "options": {
+        "pretty_print": {"type": "boolean", "default": true},
+        "include_metadata": {"type": "boolean", "default": true},
+        "encoding": {"type": "select", "options": ["UTF-8", "ASCII"], "default": "UTF-8"}
+      },
+      "use_cases": ["数据备份", "API集成", "程序导入"]
+    },
+    {
+      "id": "markdown",
+      "name": "Markdown",
+      "extension": ".md",
+      "mime_type": "text/markdown",
+      "description": "轻量级标记语言，兼容Obsidian等笔记工具",
+      "supports": {
+        "annotations": true,
+        "highlights": true,
+        "notes": true,
+        "tags": true,
+        "metadata": true,
+        "images": true,
+        "formatting": true
+      },
+      "options": {
+        "frontmatter": {"type": "select", "options": ["YAML", "TOML", "None"], "default": "YAML"},
+        "highlight_style": {"type": "select", "options": ["==text==", "**text**", "`text`"], "default": "==text=="},
+        "include_tags": {"type": "boolean", "default": true},
+        "link_style": {"type": "select", "options": ["wiki", "markdown"], "default": "wiki"}
+      },
+      "use_cases": ["Obsidian导入", "笔记同步", "文档发布"]
+    },
+    {
+      "id": "csv",
+      "name": "CSV",
+      "extension": ".csv",
+      "mime_type": "text/csv",
+      "description": "表格数据格式，适合Excel等电子表格软件",
+      "supports": {
+        "annotations": true,
+        "highlights": true,
+        "notes": true,
+        "tags": true,
+        "metadata": false,
+        "images": false,
+        "formatting": false
+      },
+      "options": {
+        "delimiter": {"type": "select", "options": [",", ";", "\t"], "default": ","},
+        "encoding": {"type": "select", "options": ["UTF-8", "GBK", "GB2312"], "default": "UTF-8"},
+        "include_header": {"type": "boolean", "default": true},
+        "quote_style": {"type": "select", "options": ["minimal", "all", "non_numeric"], "default": "minimal"}
+      },
+      "use_cases": ["数据分析", "Excel导入", "批量处理"]
+    },
+    {
+      "id": "anki",
+      "name": "Anki",
+      "extension": ".apkg",
+      "mime_type": "application/octet-stream",
+      "description": "Anki闪卡格式，支持间隔重复学习",
+      "supports": {
+        "annotations": true,
+        "highlights": true,
+        "notes": true,
+        "tags": true,
+        "metadata": true,
+        "images": true,
+        "formatting": true
+      },
+      "options": {
+        "deck_name": {"type": "string", "default": "Minder Export"},
+        "card_type": {"type": "select", "options": ["basic", "cloze", "type_answer"], "default": "basic"},
+        "include_source": {"type": "boolean", "default": true},
+        "tag_prefix": {"type": "string", "default": "minder::"}
+      },
+      "use_cases": ["间隔重复学习", "记忆卡片", "考试复习"]
+    },
+    {
+      "id": "obsidian",
+      "name": "Obsidian Vault",
+      "extension": ".zip",
+      "mime_type": "application/zip",
+      "description": "Obsidian兼容的Vault结构，包含双链和标签",
+      "supports": {
+        "annotations": true,
+        "highlights": true,
+        "notes": true,
+        "tags": true,
+        "metadata": true,
+        "images": true,
+        "formatting": true
+      },
+      "options": {
+        "folder_structure": {"type": "select", "options": ["flat", "by_source", "by_date", "by_tag"], "default": "by_source"},
+        "link_format": {"type": "select", "options": ["wiki", "markdown"], "default": "wiki"},
+        "daily_notes": {"type": "boolean", "default": false},
+        "graph_tags": {"type": "boolean", "default": true}
+      },
+      "use_cases": ["知识管理", "双链笔记", "知识图谱"]
+    },
+    {
+      "id": "html",
+      "name": "HTML",
+      "extension": ".html",
+      "mime_type": "text/html",
+      "description": "网页格式，支持富文本和交互",
+      "supports": {
+        "annotations": true,
+        "highlights": true,
+        "notes": true,
+        "tags": true,
+        "metadata": true,
+        "images": true,
+        "formatting": true
+      },
+      "options": {
+        "standalone": {"type": "boolean", "default": true},
+        "include_css": {"type": "boolean", "default": true},
+        "interactive": {"type": "boolean", "default": false}
+      },
+      "use_cases": ["网页浏览", "分享展示", "打印输出"]
+    },
+    {
+      "id": "notion",
+      "name": "Notion",
+      "extension": ".csv",
+      "mime_type": "text/csv",
+      "description": "Notion数据库兼容格式",
+      "supports": {
+        "annotations": true,
+        "highlights": true,
+        "notes": true,
+        "tags": true,
+        "metadata": true,
+        "images": false,
+        "formatting": true
+      },
+      "options": {
+        "database_type": {"type": "select", "options": ["table", "board", "gallery"], "default": "table"},
+        "property_mapping": {"type": "object", "default": {}}
+      },
+      "use_cases": ["Notion导入", "项目管理", "团队协作"]
+    },
+    {
+      "id": "zotero",
+      "name": "Zotero",
+      "extension": ".ris",
+      "mime_type": "application/x-research-info-systems",
+      "description": "文献管理软件兼容格式",
+      "supports": {
+        "annotations": true,
+        "highlights": true,
+        "notes": true,
+        "tags": true,
+        "metadata": true,
+        "images": false,
+        "formatting": false
+      },
+      "options": {
+        "include_attachments": {"type": "boolean", "default": false},
+        "note_format": {"type": "select", "options": ["plain", "html"], "default": "plain"}
+      },
+      "use_cases": ["文献管理", "学术写作", "引用管理"]
+    }
+  ],
+  "batch_export": {
+    "supported": true,
+    "max_items": 10000,
+    "compression": ["zip", "tar.gz"],
+    "split_by": ["source", "date", "tag", "none"]
+  }
+}

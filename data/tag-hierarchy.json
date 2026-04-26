@@ -1,0 +1,169 @@
+{
+  "tag_system": {
+    "version": "1.0",
+    "max_depth": 5,
+    "separator": "/",
+    "case_sensitive": false,
+    "allow_spaces": true,
+    "max_tags_per_item": 20
+  },
+  "tag_categories": [
+    {
+      "id": "subject",
+      "name": "学科分类",
+      "icon": "📚",
+      "color": "#2196F3",
+      "children": [
+        {
+          "id": "science",
+          "name": "自然科学",
+          "children": [
+            {"id": "physics", "name": "物理学"},
+            {"id": "chemistry", "name": "化学"},
+            {"id": "biology", "name": "生物学"},
+            {"id": "mathematics", "name": "数学"},
+            {"id": "astronomy", "name": "天文学"},
+            {"id": "earth_science", "name": "地球科学"}
+          ]
+        },
+        {
+          "id": "medicine",
+          "name": "医学",
+          "children": [
+            {"id": "clinical", "name": "临床医学"},
+            {"id": "pharmacology", "name": "药理学"},
+            {"id": "pathology", "name": "病理学"},
+            {"id": "epidemiology", "name": "流行病学"},
+            {"id": "public_health", "name": "公共卫生"},
+            {"id": "biostatistics", "name": "生物统计"}
+          ]
+        },
+        {
+          "id": "humanities",
+          "name": "人文学科",
+          "children": [
+            {"id": "philosophy", "name": "哲学"},
+            {"id": "history", "name": "历史"},
+            {"id": "literature", "name": "文学"},
+            {"id": "linguistics", "name": "语言学"},
+            {"id": "art", "name": "艺术"}
+          ]
+        },
+        {
+          "id": "social_science",
+          "name": "社会科学",
+          "children": [
+            {"id": "economics", "name": "经济学"},
+            {"id": "political_science", "name": "政治学"},
+            {"id": "sociology", "name": "社会学"},
+            {"id": "psychology", "name": "心理学"},
+            {"id": "education", "name": "教育学"}
+          ]
+        },
+        {
+          "id": "technology",
+          "name": "工程技术",
+          "children": [
+            {"id": "computer_science", "name": "计算机科学"},
+            {"id": "ai", "name": "人工智能"},
+            {"id": "electrical", "name": "电子工程"},
+            {"id": "mechanical", "name": "机械工程"},
+            {"id": "civil", "name": "土木工程"}
+          ]
+        }
+      ]
+    },
+    {
+      "id": "status",
+      "name": "阅读状态",
+      "icon": "📊",
+      "color": "#4CAF50",
+      "children": [
+        {"id": "unread", "name": "未读", "color": "#9E9E9E"},
+        {"id": "reading", "name": "正在阅读", "color": "#2196F3"},
+        {"id": "completed", "name": "已完成", "color": "#4CAF50"},
+        {"id": "paused", "name": "暂停", "color": "#FF9800"},
+        {"id": "abandoned", "name": "已放弃", "color": "#F44336"},
+        {"id": "reference", "name": "参考查阅", "color": "#9C27B0"}
+      ]
+    },
+    {
+      "id": "priority",
+      "name": "重要程度",
+      "icon": "⭐",
+      "color": "#FF9800",
+      "children": [
+        {"id": "critical", "name": "非常重要", "color": "#F44336"},
+        {"id": "high", "name": "重要", "color": "#FF9800"},
+        {"id": "medium", "name": "一般", "color": "#FFC107"},
+        {"id": "low", "name": "次要", "color": "#4CAF50"},
+        {"id": "optional", "name": "可选", "color": "#9E9E9E"}
+      ]
+    },
+    {
+      "id": "content_type",
+      "name": "内容类型",
+      "icon": "📄",
+      "color": "#9C27B0",
+      "children": [
+        {"id": "paper", "name": "学术论文"},
+        {"id": "book", "name": "书籍"},
+        {"id": "article", "name": "文章"},
+        {"id": "report", "name": "报告"},
+        {"id": "tutorial", "name": "教程"},
+        {"id": "lecture", "name": "讲座"},
+        {"id": "podcast", "name": "播客"},
+        {"id": "video", "name": "视频"},
+        {"id": "dataset", "name": "数据集"},
+        {"id": "code", "name": "代码"}
+      ]
+    },
+    {
+      "id": "methodology",
+      "name": "方法论",
+      "icon": "🔬",
+      "color": "#FF5722",
+      "children": [
+        {"id": "quantitative", "name": "定量研究"},
+        {"id": "qualitative", "name": "定性研究"},
+        {"id": "meta_analysis", "name": "Meta分析"},
+        {"id": "systematic_review", "name": "系统综述"},
+        {"id": "case_study", "name": "案例研究"},
+        {"id": "experiment", "name": "实验研究"},
+        {"id": "survey", "name": "调查研究"},
+        {"id": "rct", "name": "随机对照试验"},
+        {"id": "cohort", "name": "队列研究"},
+        {"id": "cross_sectional", "name": "横断面研究"}
+      ]
+    },
+    {
+      "id": "project",
+      "name": "项目",
+      "icon": "📁",
+      "color": "#607D8B",
+      "children": [] 
+    },
+    {
+      "id": "custom",
+      "name": "自定义标签",
+      "icon": "🏷️",
+      "color": "#795548",
+      "children": []
+    }
+  ],
+  "tag_aliases": {
+    "ML": "machine_learning",
+    "DL": "deep_learning",
+    "NLP": "natural_language_processing",
+    "CV": "computer_vision",
+    "STAT": "statistics",
+    "PHARMA": "pharmacology"
+  },
+  "auto_tag_rules": [
+    {"pattern": "\\.pdf$", "tag": "content_type/paper"},
+    {"pattern": "\\.epub$", "tag": "content_type/book"},
+    {"pattern": "github\\.com", "tag": "content_type/code"},
+    {"pattern": "youtube\\.com|bilibili\\.com", "tag": "content_type/video"},
+    {"pattern": "podcast|播客", "tag": "content_type/podcast"}
+  ]
+}

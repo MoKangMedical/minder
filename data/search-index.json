@@ -1,0 +1,83 @@
+{
+  "search_index": {
+    "version": "1.0",
+    "engine": "Tantivy",
+    "description": "Minder全文搜索索引配置",
+    "index_fields": [
+      {"field": "title", "type": "text", "weight": 3.0, "analyzer": "standard", "stored": true},
+      {"field": "content", "type": "text", "weight": 1.0, "analyzer": "standard", "stored": false},
+      {"field": "annotations", "type": "text", "weight": 2.0, "analyzer": "standard", "stored": false},
+      {"field": "notes", "type": "text", "weight": 2.5, "analyzer": "standard", "stored": false},
+      {"field": "tags", "type": "keyword", "weight": 1.5, "stored": true},
+      {"field": "author", "type": "keyword", "weight": 1.0, "stored": true},
+      {"field": "source", "type": "keyword", "weight": 0.5, "stored": true},
+      {"field": "date_created", "type": "date", "stored": true},
+      {"field": "date_modified", "type": "date", "stored": true},
+      {"field": "file_type", "type": "keyword", "stored": true},
+      {"field": "language", "type": "keyword", "stored": true},
+      {"field": "reading_progress", "type": "float", "stored": true}
+    ],
+    "analyzers": {
+      "standard": {"tokenizer": "standard", "filters": ["lowercase", "stop_words"]},
+      "chinese": {"tokenizer": "jieba", "filters": ["lowercase", "stop_words"]},
+      "stemming": {"tokenizer": "standard", "filters": ["lowercase", "stop_words", "porter_stemmer"]}
+    },
+    "search_options": {
+      "fuzzy_matching": {
+        "enabled": true,
+        "max_edits": 2,
+        "prefix_length": 2
+      },
+      "highlighting": {
+        "enabled": true,
+        "fragment_size": 150,
+        "max_fragments": 3,
+        "pre_tag": "<mark>",
+        "post_tag": "</mark>"
+      },
+      "pagination": {
+        "default_page_size": 20,
+        "max_page_size": 100
+      },
+      "facets": ["tags", "file_type", "author", "language", "date_created"]
+    },
+    "ranking": {
+      "algorithm": "BM25",
+      "parameters": {
+        "k1": 1.2,
+        "b": 0.75
+      },
+      "boost_recent": {
+        "enabled": true,
+        "decay_function": "exponential",
+        "scale": "30d",
+        "decay": 0.5
+      }
+    },
+    "synonyms": {
+      "enabled": true,
+      "dictionary": [
+        ["AI", "人工智能", "机器学习", "深度学习"],
+        ["统计", "statistics", "生物统计"],
+        ["论文", "paper", "article", "研究"],
+        ["标注", "annotation", "highlight", "笔记"],
+        ["医学", "medical", "临床", "clinical"]
+      ]
+    },
+    "stop_words": {
+      "english": ["the", "a", "an", "is", "are", "was", "were", "in", "on", "at", "to", "for", "of", "with"],
+      "chinese": ["的", "了", "在", "是", "我", "有", "和", "就", "不", "人", "都", "一", "一个", "上", "也"]
+    }
+  },
+  "quick_search": {
+    "enabled": true,
+    "shortcut": "Ctrl+K",
+    "sources": ["recent", "bookmarks", "frequent", "suggestions"],
+    "max_suggestions": 10
+  },
+  "search_history": {
+    "enabled": true,
+    "max_entries": 100,
+    "clear_on_logout": false
+  }
+}
