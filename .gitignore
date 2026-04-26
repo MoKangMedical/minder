@@ -1,6 +1,14 @@
+# Byte-compiled / cached
+__pycache__/
+*.py[cod]
+*$py.class
+
 # 构建输出
 *.log
 *.tmp
+dist/
+build/
+*.egg-info/
 
 # 依赖
 node_modules/
