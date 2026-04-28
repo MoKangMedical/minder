@@ -58,6 +58,7 @@ footer{background:rgba(0,0,0,0.3);border-top:1px solid rgba(255,255,255,0.08);pa
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Minder 知识管理平台">
     <meta name="twitter:description" content="AI驱动的企业知识管理与协作平台">
+<script src="https://cdn.plot.ly/plotly-2.27.0.min.js"></script>
 </head>
 <body style="padding-top:56px!important">
 <nav id="opc-nav" style="position:fixed;top:0;left:0;right:0;z-index:9999;background:rgba(10,10,30,0.95);backdrop-filter:blur(20px);border-bottom:1px solid rgba(99,102,241,0.2);padding:0 2rem;height:56px;display:flex;align-items:center;justify-content:space-between;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif">
@@ -103,7 +104,77 @@ footer{background:rgba(0,0,0,0.3);border-top:1px solid rgba(255,255,255,0.08);pa
   </div>
 </section>
 
-<section class="section" id="pricing" style="background:rgba(99,102,241,0.03);border-radius:32px;margin:0 1rem">
+<section class="section" id="demo-placeholder">
+
+<section id="demo" style="padding:80px 20px;background:linear-gradient(135deg,#0a0a1a,#1a1a2e)">
+  <div style="max-width:1000px;margin:0 auto;text-align:center">
+    <h2 style="font-size:2rem;font-weight:700;margin-bottom:16px;color:#fff">在线体验</h2>
+    <p style="color:#888;margin-bottom:32px">输入您的知识管理需求，AI自动分析并推荐最佳方案</p>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;justify-content:center">
+      <div style="flex:1;min-width:300px;max-width:450px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;text-align:left">
+        <h3 style="font-size:1.1rem;margin-bottom:12px;color:#fff">输入需求</h3>
+        <textarea id="demoInput" style="width:100%;height:120px;background:rgba(0,0,0,0.3);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:12px;color:#fff;font-size:14px;resize:none" placeholder="例如：我需要管理一个医疗研究团队的知识库，包括论文、数据和实验记录...">我需要管理一个医疗研究团队的知识库，包括论文、数据和实验记录，支持多人协作和AI搜索。</textarea>
+        <button onclick="runDemo()" style="margin-top:12px;padding:10px 24px;background:linear-gradient(135deg,#3b82f6,#06b6d4);border:none;border-radius:8px;color:#fff;font-weight:600;cursor:pointer;width:100%">开始分析</button>
+      </div>
+      <div style="flex:1;min-width:300px;max-width:450px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:12px;padding:24px;text-align:left">
+        <h3 style="font-size:1.1rem;margin-bottom:12px;color:#fff">AI分析结果</h3>
+        <div id="demoOutput" style="min-height:180px;color:#888;font-size:14px;line-height:1.8">
+          等待输入...
+        </div>
+      </div>
+    </div>
+    <div id="demoChart" style="margin-top:32px;height:300px;max-width:800px;margin-left:auto;margin-right:auto"></div>
+  </div>
+</section>
+
+<script>
+function runDemo(){
+  var input=document.getElementById('demoInput').value;
+  var output=document.getElementById('demoOutput');
+  output.innerHTML='<span style="color:#3b82f6">分析中...</span>';
+  setTimeout(function(){
+    var h='<div style="margin-bottom:12px"><strong style="color:#10b981">✓ 需求分析完成</strong></div>';
+    h+='<div style="margin-bottom:8px"><strong>推荐方案：</strong>企业级知识图谱 + 多人协作空间</div>';
+    h+='<div style="margin-bottom:8px"><strong>核心功能：</strong></div>';
+    h+='<div style="padding-left:16px;border-left:2px solid #3b82f6">';
+    h+='• AI智能搜索 (语义理解 + 关键词匹配)<br>';
+    h+='• 自动标签分类 (论文/数据/实验记录)<br>';
+    h+='• 多人实时协作 (评论/批注/版本控制)<br>';
+    h+='• 知识图谱可视化 (实体关系网络)';
+    h+='</div>';
+    h+='<div style="margin-top:12px;color:#888">预计部署时间：2-3个工作日</div>';
+    output.innerHTML=h;
+    
+    if(typeof Plotly!=='undefined'){
+      var categories=['论文管理','数据存储','实验记录','协作功能','AI搜索','知识图谱'];
+      var scores=[92,88,85,94,96,90];
+      Plotly.newPlot('demoChart',[{
+        type:'scatterpolar',
+        r:scores.concat([scores[0]]),
+        theta:categories.concat([categories[0]]),
+        fill:'toself',
+        fillcolor:'rgba(59,130,246,0.2)',
+        line:{color:'#3b82f6',width:2},
+        name:'能力评分'
+      }],{
+        title:{text:'知识管理能力评估',font:{color:'#fff',size:14}},
+        paper_bgcolor:'rgba(0,0,0,0)',
+        plot_bgcolor:'rgba(0,0,0,0)',
+        font:{color:'#888'},
+        polar:{
+          bgcolor:'rgba(0,0,0,0)',
+          radialaxis:{visible:true,range:[0,100],gridcolor:'rgba(255,255,255,0.1)'},
+          angularaxis:{gridcolor:'rgba(255,255,255,0.1)'}
+        },
+        showlegend:false,
+        margin:{t:40,b:40,l:60,r:60}
+      },{responsive:true,displayModeBar:false});
+    }
+  },1500);
+}
+</script>
+
+<section id="pricing" style="background:rgba(99,102,241,0.03);border-radius:32px;margin:0 1rem">
   <h2 class="st">定价方案</h2>
   <p class="ss">灵活定价，按需选择</p>
   <div class="pg">
